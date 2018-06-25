@@ -8,20 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		6FB42AC820CAE116001289F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB42AC720CAE116001289F0 /* AppDelegate.swift */; };
-		6FB42ACA20CAE116001289F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB42AC920CAE116001289F0 /* ViewController.swift */; };
+		6FB42ACA20CAE116001289F0 /* SetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB42AC920CAE116001289F0 /* SetViewController.swift */; };
 		6FB42ACD20CAE116001289F0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6FB42ACB20CAE116001289F0 /* Main.storyboard */; };
 		6FB42ACF20CAE118001289F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6FB42ACE20CAE118001289F0 /* Assets.xcassets */; };
 		6FB42AD220CAE118001289F0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6FB42AD020CAE118001289F0 /* LaunchScreen.storyboard */; };
+		6FC0952020CAE4E800B8C6E4 /* SetCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC0951F20CAE4E800B8C6E4 /* SetCard.swift */; };
+		6FC0952220CAEC7400B8C6E4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6FC0952120CAEC7400B8C6E4 /* Default-568h@2x.png */; };
+		6FC0952420CAECAE00B8C6E4 /* SetCardGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC0952320CAECAE00B8C6E4 /* SetCardGame.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6FB42AC420CAE116001289F0 /* Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Set.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB42AC720CAE116001289F0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6FB42AC920CAE116001289F0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6FB42AC920CAE116001289F0 /* SetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetViewController.swift; sourceTree = "<group>"; };
 		6FB42ACC20CAE116001289F0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6FB42ACE20CAE118001289F0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6FB42AD120CAE118001289F0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6FB42AD320CAE118001289F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6FC0951F20CAE4E800B8C6E4 /* SetCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCard.swift; sourceTree = "<group>"; };
+		6FC0952120CAEC7400B8C6E4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		6FC0952320CAECAE00B8C6E4 /* SetCardGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardGame.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +44,7 @@
 		6FB42ABB20CAE116001289F0 = {
 			isa = PBXGroup;
 			children = (
+				6FC0952120CAEC7400B8C6E4 /* Default-568h@2x.png */,
 				6FB42AC620CAE116001289F0 /* Set */,
 				6FB42AC520CAE116001289F0 /* Products */,
 			);
@@ -54,14 +61,24 @@
 		6FB42AC620CAE116001289F0 /* Set */ = {
 			isa = PBXGroup;
 			children = (
-				6FB42AC720CAE116001289F0 /* AppDelegate.swift */,
-				6FB42AC920CAE116001289F0 /* ViewController.swift */,
+				6FC0951F20CAE4E800B8C6E4 /* SetCard.swift */,
+				6FC0952320CAECAE00B8C6E4 /* SetCardGame.swift */,
+				6FB42AC920CAE116001289F0 /* SetViewController.swift */,
 				6FB42ACB20CAE116001289F0 /* Main.storyboard */,
-				6FB42ACE20CAE118001289F0 /* Assets.xcassets */,
-				6FB42AD020CAE118001289F0 /* LaunchScreen.storyboard */,
 				6FB42AD320CAE118001289F0 /* Info.plist */,
+				6FC0951E20CAE37700B8C6E4 /* Supporting files */,
 			);
 			path = Set;
+			sourceTree = "<group>";
+		};
+		6FC0951E20CAE37700B8C6E4 /* Supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				6FB42AD020CAE118001289F0 /* LaunchScreen.storyboard */,
+				6FB42ACE20CAE118001289F0 /* Assets.xcassets */,
+				6FB42AC720CAE116001289F0 /* AppDelegate.swift */,
+			);
+			path = "Supporting files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -96,6 +113,7 @@
 				TargetAttributes = {
 					6FB42AC320CAE116001289F0 = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -123,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6FB42AD220CAE118001289F0 /* LaunchScreen.storyboard in Resources */,
+				6FC0952220CAEC7400B8C6E4 /* Default-568h@2x.png in Resources */,
 				6FB42ACF20CAE118001289F0 /* Assets.xcassets in Resources */,
 				6FB42ACD20CAE116001289F0 /* Main.storyboard in Resources */,
 			);
@@ -135,7 +154,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FB42ACA20CAE116001289F0 /* ViewController.swift in Sources */,
+				6FC0952420CAECAE00B8C6E4 /* SetCardGame.swift in Sources */,
+				6FC0952020CAE4E800B8C6E4 /* SetCard.swift in Sources */,
+				6FB42ACA20CAE116001289F0 /* SetViewController.swift in Sources */,
 				6FB42AC820CAE116001289F0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,7 +310,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bfk-engineering.Set";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -307,7 +328,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bfk-engineering.Set";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
