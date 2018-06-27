@@ -19,15 +19,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mWa-n9-viu">
-                                <rect key="frame" x="16" y="621" width="75" height="30"/>
+                            <button opaque="NO" contentMode="redraw" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mWa-n9-viu">
+                                <rect key="frame" x="16" y="617" width="91" height="34"/>
+                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                                 <state key="normal" title="New Game"/>
                                 <connections>
                                     <action selector="newGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YVO-Nw-j51"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PmO-HR-6yg">
-                                <rect key="frame" x="328" y="621" width="31" height="30"/>
+                                <rect key="frame" x="312" y="617" width="47" height="34"/>
+                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                                 <state key="normal" title="Deal"/>
                                 <connections>
                                     <action selector="deal:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NVQ-Q8-3MI"/>
@@ -276,9 +278,22 @@
                                 </constraints>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DD9-rS-olj">
-                                <rect key="frame" x="16" y="613" width="343" height="0.0"/>
+                                <rect key="frame" x="16" y="609" width="0.0" height="0.0"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5y-nB-NKm">
+                                <rect key="frame" x="317" y="588.5" width="42" height="20.5"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Label">
+                                        <attributes>
+                                            <color key="NSColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -290,11 +305,14 @@
                             <constraint firstItem="PmO-HR-6yg" firstAttribute="top" secondItem="DD9-rS-olj" secondAttribute="bottom" constant="8" symbolic="YES" id="6xw-o9-1wB"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="PmO-HR-6yg" secondAttribute="bottom" constant="16" id="8pC-5k-NUj"/>
                             <constraint firstItem="PmO-HR-6yg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mWa-n9-viu" secondAttribute="trailing" constant="8" symbolic="YES" id="9bQ-fZ-dDj"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="DD9-rS-olj" secondAttribute="trailing" constant="16" id="BCB-JE-hyN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PmO-HR-6yg" secondAttribute="trailing" constant="16" id="Fhv-rb-rNq"/>
                             <constraint firstItem="mWa-n9-viu" firstAttribute="top" relation="greaterThanOrEqual" secondItem="3vz-NV-rIi" secondAttribute="bottom" constant="16" id="GCZ-1Y-LMT"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="mWa-n9-viu" secondAttribute="bottom" constant="16" id="OYd-nn-foi"/>
+                            <constraint firstItem="PmO-HR-6yg" firstAttribute="top" secondItem="B5y-nB-NKm" secondAttribute="bottom" constant="8" symbolic="YES" id="Vcp-Lr-LLS"/>
+                            <constraint firstItem="B5y-nB-NKm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="DD9-rS-olj" secondAttribute="trailing" constant="8" symbolic="YES" id="WJJ-mr-lZt"/>
                             <constraint firstItem="3vz-NV-rIi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="YdJ-Tu-OoJ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="B5y-nB-NKm" secondAttribute="trailing" constant="16" id="aLe-mV-wC6"/>
+                            <constraint firstItem="B5y-nB-NKm" firstAttribute="top" relation="greaterThanOrEqual" secondItem="WmQ-lx-H0l" secondAttribute="bottom" constant="16" id="c5g-44-VxP"/>
                             <constraint firstItem="mWa-n9-viu" firstAttribute="top" secondItem="DD9-rS-olj" secondAttribute="bottom" constant="8" symbolic="YES" id="lMF-q2-tR8"/>
                             <constraint firstItem="3vz-NV-rIi" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="w0S-UR-xzm"/>
                             <constraint firstItem="DD9-rS-olj" firstAttribute="top" relation="greaterThanOrEqual" secondItem="WmQ-lx-H0l" secondAttribute="bottom" constant="16" id="zW5-Bo-ij8"/>
@@ -304,6 +322,7 @@
                     <connections>
                         <outlet property="dealButton" destination="PmO-HR-6yg" id="x9A-TW-mKm"/>
                         <outlet property="score" destination="DD9-rS-olj" id="0iT-Zc-vFs"/>
+                        <outlet property="test" destination="B5y-nB-NKm" id="xJY-Bd-8Ta"/>
                         <outletCollection property="gameButtons" destination="TtA-x3-fSe" collectionClass="NSMutableArray" id="nlO-XF-X62"/>
                         <outletCollection property="gameButtons" destination="uOR-s6-S58" collectionClass="NSMutableArray" id="itg-OL-ZPM"/>
                         <outletCollection property="gameButtons" destination="uOR-s6-S58" collectionClass="NSMutableArray" id="WDZ-Nn-UnW"/>

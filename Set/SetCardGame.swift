@@ -98,9 +98,11 @@ class SetCardGame: CustomStringConvertible {
 
     private func dealCards(numberToDeal:Int){
         if dealtCards.count + numberToDeal <= Constants.maxCardsOnTable{
-            for _ in 0...numberToDeal-1{
-                let card = setGame.remove(at: Int(setGame.count).arc4Random)
-                dealtCards.append(card)
+            if setGame.count >= numberToDeal {
+                for _ in 0...numberToDeal-1{
+                    let card = setGame.remove(at: Int(setGame.count).arc4Random)
+                    dealtCards.append(card)
+                }
             }
         }
     }

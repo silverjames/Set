@@ -25,32 +25,42 @@ class SetViewController: UIViewController {
     
     @IBOutlet var gameButtons: [UIButton]!
 
+    @IBOutlet weak var test: UILabel!
+    
     @IBAction func touchCard(_ sender: UIButton) {
         
-        switch selectedCards.count{
+        if selectedCards.contains(where: {$0.value == sender }){
+            selectedCards.remove(at: selectedCards.firstIndex(where: {$0.value == sender })!)
+            buttonFormatNotSelected(button: sender)
+            game.score += Constant.deselectPoints
+            updateScore()
             
-        case 0,1:
-            addselectedCardToMatchingSet(sender)
-            
-        case 2:
-            addselectedCardToMatchingSet(sender)
-            var matchSet = [SetCard]()
-            for cardID in selectedCards.keys{
-                if let card = game.dealtCards.first(where: {$0.id == cardID}){
-                    matchSet.append(card)
+        } else {
+            switch selectedCards.count{
+                
+            case 0,1:
+                addselectedCardToMatchingSet(sender)
+                
+            case 2:
+                addselectedCardToMatchingSet(sender)
+                var matchSet = [SetCard]()
+                for cardID in selectedCards.keys{
+                    if let card = game.dealtCards.first(where: {$0.id == cardID}){
+                        matchSet.append(card)
+                    }
                 }
-            }
 
-            if game.match(keysToMatch: matchSet){
-                print("cards matched!")
-                _ = Timer.scheduledTimer(withTimeInterval: 4, repeats: false, block: {_ in self.processMatch(matchSet: matchSet)})
-            } else {
-                print("cards did not match!")
-                _ = Timer.scheduledTimer(withTimeInterval: 4, repeats: false, block: {_ in self.processMismatch(matchSet: matchSet)})
+                if game.match(keysToMatch: matchSet){
+                    print("cards matched!")
+                    _ = Timer.scheduledTimer(withTimeInterval: 4, repeats: false, block: {_ in self.processMatch(matchSet: matchSet)})
+                } else {
+                    print("cards did not match!")
+                    _ = Timer.scheduledTimer(withTimeInterval: 4, repeats: false, block: {_ in self.processMismatch(matchSet: matchSet)})
+                }
+                
+            default:
+                break
             }
-            
-        default:
-            break
         }
     }
     
@@ -106,13 +116,13 @@ class SetViewController: UIViewController {
                     subView.layer.cornerRadius = 5
                     subView.layer.borderWidth = 0.2
                     subView.mask?.clipsToBounds = true
-//                    subView.layer.borderColor = #colorLiteral(red: 0.1960784346, green: 0.3411764801, blue: 0.1019607857, alpha: 1)
+                    subView.layer.borderColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
                     subView.backgroundColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
                     
                 }
             }
         }
-        
+        printMessageForBernie()
         newGame()
     }
 
@@ -122,6 +132,8 @@ class SetViewController: UIViewController {
     // **************************************
     private func newGame(){
         game.newGame()
+        dealButton.isEnabled = true
+        updateScore()
         print ("\(game.description)")
         render(howMany: game.dealtCards.count)
         showButtons()
@@ -139,27 +151,43 @@ class SetViewController: UIViewController {
     }
     
     private func render(howMany:Int){
-        var attributes: [NSAttributedString.Key:Any]? = nil
         cardFaces.removeAll()
         
-//MARK: change color assignment and button matching
-
         for card in game.dealtCards{
             var symbols=""
             for _ in 0...card.decoration[0]{
                     symbols.append(validSymbols[card.decoration[1]])
             }
-            let color:UIColor
-            if card.decoration[3] == 0{
-                color = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: CGFloat(validFills[card.decoration[2]]))
-            } else if card.decoration[3] == 1{
-                color = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: CGFloat(validFills[card.decoration[2]]))
-            } else{
-                color = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: CGFloat(validFills[card.decoration[2]]))
-            }
-            attributes = [.font: UIFont.systemFont(ofSize: 19), .foregroundColor:color]
-            cardFaces.append(NSAttributedString(string: symbols, attributes: attributes))
+            cardFaces.append(NSAttributedString(string: symbols, attributes: {getAttributes(card.decoration)}() as [NSAttributedString.Key : Any]))
         }
+    }
+    
+    private func getAttributes (_ deco: [Int]) -> [NSAttributedString.Key: Any?]{
+        var attributes: [NSAttributedString.Key:Any]? = nil
+        let color:UIColor
+        
+        switch deco[3] {
+        case 0:
+            color = UIColor.red
+        case 1:
+            color = UIColor.green
+        case 2:
+            color = UIColor.blue
+        default:
+            color = UIColor.gray
+        }
+        switch deco[2] {
+        case 0:
+            attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(22), .foregroundColor: color, .strokeWidth: -5.0]
+        case 1:
+            attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(22), .foregroundColor: color.withAlphaComponent(0.2), .strokeWidth: -5.0]
+        case 2:
+            attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(22), .foregroundColor: color.withAlphaComponent(1.0), .strokeWidth: 5.0]
+        default:
+            break
+        }
+
+        return attributes!
     }
     
     private func showButtons(){
@@ -197,7 +225,7 @@ class SetViewController: UIViewController {
             buttonFormatNotSelected(button: matches.value)
         }
         game.score += Constant.matchPoints
-        score.text = "Score: \(game.score)"
+        updateScore()
         selectedCards.removeAll()
         deal()
     }
@@ -207,12 +235,24 @@ class SetViewController: UIViewController {
             buttonFormatNotSelected(button: matches.value)
         }
         game.score += Constant.mismatchPoints
-        score.text = "Score: \(game.score)"
+        updateScore()
         selectedCards.removeAll()
         
         }
+    
+    private func updateScore(){
+        score.text = "Score: \(game.score)"
+    }
+    
+    private func printMessageForBernie(){
+        //        MARK: test code for nsattributedstring
+        var attributes = [NSAttributedString.Key: Any?]()
+        attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(10), .foregroundColor: UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.15), .strokeWidth: -3.0]
+        test.attributedText = (NSAttributedString(string:"Bernie was here...", attributes:attributes as [NSAttributedString.Key : Any]))
+    }
 }
 fileprivate struct Constant {
     static let matchPoints = 3
     static let mismatchPoints = -5
+    static let deselectPoints = -1
 }
