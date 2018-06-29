@@ -14,25 +14,22 @@ class SetViewController: UIViewController {
     // MARK: outlets
     // **************************************
 
-    @IBAction func newGame(_ sender: UIButton) {
-        newGame()
-    }
-    
-    @IBAction func deal(_ sender: UIButton) {
-        deal()
-    }
+
     @IBOutlet weak var dealButton: UIButton!
     
     @IBOutlet var gameButtons: [UIButton]!
 
     @IBOutlet weak var test: UILabel!
     
+    @IBOutlet weak var score: UILabel!
+    
+    @IBOutlet weak var cheatButton: UIButton!
+
     @IBAction func touchCard(_ sender: UIButton) {
-        
-        if selectedCards.contains(where: {$0.value == sender }){
+       if selectedCards.contains(where: {$0.value == sender }){
             selectedCards.remove(at: selectedCards.firstIndex(where: {$0.value == sender })!)
             buttonFormatNotSelected(button: sender)
-            game.score += Constant.deselectPoints
+            game.score += Constants.deselectPoints
             updateScore()
             
         } else {
@@ -52,10 +49,10 @@ class SetViewController: UIViewController {
 
                 if game.match(keysToMatch: matchSet){
                     print("cards matched!")
-                    _ = Timer.scheduledTimer(withTimeInterval: 4, repeats: false, block: {_ in self.processMatch(matchSet: matchSet)})
+                    _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: {_ in self.processMatch(matchSet: matchSet)})
                 } else {
                     print("cards did not match!")
-                    _ = Timer.scheduledTimer(withTimeInterval: 4, repeats: false, block: {_ in self.processMismatch(matchSet: matchSet)})
+                    _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: {_ in self.processMismatch(matchSet: matchSet)})
                 }
                 
             default:
@@ -63,14 +60,40 @@ class SetViewController: UIViewController {
             }
         }
     }
+ 
+    @IBAction func newGame(_ sender: UIButton) {
+        newGame()
+    }
     
-    @IBOutlet weak var score: UILabel!
+    @IBAction func deal(_ sender: UIButton) {
+        deal()
+    }
+
+    @IBAction func cheatNow(_ sender: Any) {
+        selectedCards.removeAll(keepingCapacity: true)
+
+        for card in cheatSet {
+            addselectedCardToMatchingSet(gameButtons[game.dealtCards.firstIndex(of: card)!])
+        }
+        _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: {_ in self.processMatch(matchSet: self.cheatSet)})
+        
+        let penalty = -2 * matchPoints
+        game.score += penalty
+        updateScore()
+    }
+
 
     // **************************************
     // MARK: private properties
     // **************************************
     private lazy var game:SetCardGame = SetCardGame()
     private var cardFaces = [NSAttributedString]()
+    
+    private var matchPoints:Int {
+        get {
+            return (Constants.maxCardsOnTable*2)/game.dealtCards.count + 1
+        }
+    }
 
     private var validNumbers:[Int]{
         return [1, 2, 3]
@@ -87,6 +110,9 @@ class SetViewController: UIViewController {
     
     private var selectedCards = [Int:UIButton]()
     
+    private lazy var cheatSet = [SetCard]()
+
+    
     // **************************************
     // MARK: view lifecycle functions
     // **************************************
@@ -97,11 +123,14 @@ class SetViewController: UIViewController {
 
         for subView in view.subviews{
             if subView is UIButton {
-                subView.layer.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-                subView.layer.cornerRadius = 5
-                subView.layer.borderWidth = 0.2
-                subView.mask?.clipsToBounds = true
-                subView.layer.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+                let button = subView as! UIButton
+                button.layer.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
+                button.layer.cornerRadius = 5
+                button.layer.borderWidth = 0.2
+                button.mask?.clipsToBounds = true
+                button.layer.borderColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+                button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16.0)
+                
             } else{
                 if subView is UIStackView{
                     for stackViews in subView.subviews{
@@ -133,6 +162,7 @@ class SetViewController: UIViewController {
     private func newGame(){
         game.newGame()
         dealButton.isEnabled = true
+        cheatButton.isEnabled = checkForCheat()
         updateScore()
         print ("\(game.description)")
         render(howMany: game.dealtCards.count)
@@ -147,7 +177,28 @@ class SetViewController: UIViewController {
             dealButton.isEnabled = true
         }
         render(howMany: game.dealtCards.count)
+        cheatButton.isEnabled = checkForCheat()
         showButtons()
+    }
+    
+    private func checkForCheat () -> Bool{
+        var cheatFound = false
+        cheatSet.removeAll(keepingCapacity: true)
+        var checkSet:[SetCard]
+        for i in 0..<game.dealtCards.count-2{
+            for j in i+1..<game.dealtCards.count-1{
+                for k in j+1..<game.dealtCards.count{
+                    checkSet = [game.dealtCards[i], game.dealtCards[j], game.dealtCards[k]]
+                    if !cheatFound && game.match(keysToMatch: checkSet)  {
+                        cheatButton.isEnabled = true
+                        cheatFound = true
+                        cheatSet = checkSet
+//                        print ("\(cheatSet)")
+                    }
+                }
+            }
+        }
+        return cheatFound
     }
     
     private func render(howMany:Int){
@@ -210,12 +261,20 @@ class SetViewController: UIViewController {
     }
     
     private func buttonFormatNotSelected(button: UIButton){
-        button.layer.cornerRadius = 3
+        button.layer.cornerRadius = 5
         button.layer.borderWidth = 0.2
         button.mask?.clipsToBounds = true
-        button.layer.borderColor = UIColor.gray.cgColor
+        button.layer.borderColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
         button.setBackgroundImage(UIImage(named: "white")!, for: UIControl.State .normal)
-        }
+    }
+
+    private func buttonFormatSelected(button: UIButton){
+        button.layer.cornerRadius = 5
+        button.layer.borderWidth = 3.0
+        button.mask?.clipsToBounds = true
+        button.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)
+        button.setBackgroundImage(UIImage(named: "white")!, for: UIControl.State .normal)
+    }
 
     private func processMatch(matchSet:[SetCard]){
         for matches in selectedCards{
@@ -224,7 +283,7 @@ class SetViewController: UIViewController {
             game.matchedCards.append(card.first!)
             buttonFormatNotSelected(button: matches.value)
         }
-        game.score += Constant.matchPoints
+        game.score += matchPoints
         updateScore()
         selectedCards.removeAll()
         deal()
@@ -234,7 +293,7 @@ class SetViewController: UIViewController {
         for matches in selectedCards{
             buttonFormatNotSelected(button: matches.value)
         }
-        game.score += Constant.mismatchPoints
+        game.score += Constants.mismatchPoints
         updateScore()
         selectedCards.removeAll()
         
@@ -251,8 +310,4 @@ class SetViewController: UIViewController {
         test.attributedText = (NSAttributedString(string:"Bernie was here...", attributes:attributes as [NSAttributedString.Key : Any]))
     }
 }
-fileprivate struct Constant {
-    static let matchPoints = 3
-    static let mismatchPoints = -5
-    static let deselectPoints = -1
-}
+

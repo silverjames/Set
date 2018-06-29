@@ -19,16 +19,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="redraw" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mWa-n9-viu">
-                                <rect key="frame" x="16" y="617" width="91" height="34"/>
-                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
-                                <state key="normal" title="New Game"/>
-                                <connections>
-                                    <action selector="newGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YVO-Nw-j51"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PmO-HR-6yg">
-                                <rect key="frame" x="312" y="617" width="47" height="34"/>
+                                <rect key="frame" x="312" y="591.5" width="47" height="34"/>
                                 <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                                 <state key="normal" title="Deal"/>
                                 <connections>
@@ -278,15 +270,15 @@
                                 </constraints>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DD9-rS-olj">
-                                <rect key="frame" x="16" y="609" width="0.0" height="0.0"/>
+                                <rect key="frame" x="187.5" y="583.5" width="0.0" height="0.0"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5y-nB-NKm">
-                                <rect key="frame" x="317" y="588.5" width="42" height="20.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5y-nB-NKm">
+                                <rect key="frame" x="115" y="635" width="132" height="21"/>
                                 <attributedString key="attributedText">
-                                    <fragment content="Label">
+                                    <fragment content="Label........">
                                         <attributes>
                                             <color key="NSColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <font key="NSFont" metaFont="system" size="17"/>
@@ -296,30 +288,51 @@
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qse-3G-Nio" userLabel="CheatButton">
+                                <rect key="frame" x="156" y="591.5" width="63" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                <state key="normal" title="Cheat"/>
+                                <connections>
+                                    <action selector="cheatNow:" destination="BYZ-38-t0r" eventType="touchUpInside" id="D0H-q1-wqQ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="redraw" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mWa-n9-viu">
+                                <rect key="frame" x="16" y="591.5" width="91" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                <state key="normal" title="New Game"/>
+                                <connections>
+                                    <action selector="newGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YVO-Nw-j51"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.45085787770000002" green="0.98829740290000001" blue="0.83763033149999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.55988609790802002" green="0.91546624898910522" blue="0.71463149785995483" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="DD9-rS-olj" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="3jr-hN-3cl"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="3vz-NV-rIi" secondAttribute="trailing" constant="16" id="6Jr-DU-Nug"/>
-                            <constraint firstItem="DD9-rS-olj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="6LV-iK-gpc"/>
+                            <constraint firstItem="DD9-rS-olj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="6LV-iK-gpc"/>
                             <constraint firstItem="mWa-n9-viu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="6aT-Ce-Gq4"/>
                             <constraint firstItem="PmO-HR-6yg" firstAttribute="top" secondItem="DD9-rS-olj" secondAttribute="bottom" constant="8" symbolic="YES" id="6xw-o9-1wB"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="PmO-HR-6yg" secondAttribute="bottom" constant="16" id="8pC-5k-NUj"/>
-                            <constraint firstItem="PmO-HR-6yg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mWa-n9-viu" secondAttribute="trailing" constant="8" symbolic="YES" id="9bQ-fZ-dDj"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PmO-HR-6yg" secondAttribute="trailing" constant="16" id="Fhv-rb-rNq"/>
-                            <constraint firstItem="mWa-n9-viu" firstAttribute="top" relation="greaterThanOrEqual" secondItem="3vz-NV-rIi" secondAttribute="bottom" constant="16" id="GCZ-1Y-LMT"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="mWa-n9-viu" secondAttribute="bottom" constant="16" id="OYd-nn-foi"/>
-                            <constraint firstItem="PmO-HR-6yg" firstAttribute="top" secondItem="B5y-nB-NKm" secondAttribute="bottom" constant="8" symbolic="YES" id="Vcp-Lr-LLS"/>
-                            <constraint firstItem="B5y-nB-NKm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="DD9-rS-olj" secondAttribute="trailing" constant="8" symbolic="YES" id="WJJ-mr-lZt"/>
+                            <constraint firstItem="B5y-nB-NKm" firstAttribute="top" secondItem="Qse-3G-Nio" secondAttribute="bottom" constant="8" symbolic="YES" id="M91-3q-Y0G"/>
+                            <constraint firstItem="PmO-HR-6yg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Qse-3G-Nio" secondAttribute="trailing" constant="16" id="Pae-pi-62I"/>
+                            <constraint firstItem="Qse-3G-Nio" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mWa-n9-viu" secondAttribute="trailing" constant="16" id="UgC-xP-I3p"/>
+                            <constraint firstItem="B5y-nB-NKm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="115" id="Y43-rx-koF"/>
                             <constraint firstItem="3vz-NV-rIi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="YdJ-Tu-OoJ"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="B5y-nB-NKm" secondAttribute="trailing" constant="16" id="aLe-mV-wC6"/>
-                            <constraint firstItem="B5y-nB-NKm" firstAttribute="top" relation="greaterThanOrEqual" secondItem="WmQ-lx-H0l" secondAttribute="bottom" constant="16" id="c5g-44-VxP"/>
+                            <constraint firstItem="Qse-3G-Nio" firstAttribute="top" secondItem="DD9-rS-olj" secondAttribute="bottom" constant="8" symbolic="YES" id="iyk-a2-Wdp"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="B5y-nB-NKm" secondAttribute="bottom" constant="11" id="jQF-sR-Vss"/>
                             <constraint firstItem="mWa-n9-viu" firstAttribute="top" secondItem="DD9-rS-olj" secondAttribute="bottom" constant="8" symbolic="YES" id="lMF-q2-tR8"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="B5y-nB-NKm" secondAttribute="trailing" constant="128" id="nMa-PU-cAS"/>
+                            <constraint firstItem="Qse-3G-Nio" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="uWI-ta-zYd"/>
                             <constraint firstItem="3vz-NV-rIi" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="w0S-UR-xzm"/>
                             <constraint firstItem="DD9-rS-olj" firstAttribute="top" relation="greaterThanOrEqual" secondItem="WmQ-lx-H0l" secondAttribute="bottom" constant="16" id="zW5-Bo-ij8"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="cheatButton" destination="Qse-3G-Nio" id="Wht-TX-RjA"/>
                         <outlet property="dealButton" destination="PmO-HR-6yg" id="x9A-TW-mKm"/>
                         <outlet property="score" destination="DD9-rS-olj" id="0iT-Zc-vFs"/>
                         <outlet property="test" destination="B5y-nB-NKm" id="xJY-Bd-8Ta"/>

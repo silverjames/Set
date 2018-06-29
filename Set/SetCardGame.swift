@@ -30,6 +30,7 @@ class SetCardGame: CustomStringConvertible {
             }
         }
     var score = 0
+//    enum far{}
 
     //  **************************************
     // MARK: private properties
@@ -59,6 +60,7 @@ class SetCardGame: CustomStringConvertible {
     
     func match(keysToMatch:[SetCard]) -> Bool{
         var matched = [false, false, false, false]
+        
         let numbers = keysToMatch.map {$0.decoration[0]}
         if numbers.allEqual() || numbers.allDifferent(){
             matched[0] = true
@@ -138,5 +140,8 @@ struct Constants {
     static let initialDealSize = 12
     static let dealSize = 3
     static let maxCardsOnTable = 24
+    static let mismatchPoints = -4
+    static let cheatPoints = -5
+    static let deselectPoints = -1
 }
 
