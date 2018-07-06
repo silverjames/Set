@@ -116,10 +116,14 @@ class SetViewController: UIViewController {
     // **************************************
     // MARK: view lifecycle functions
     // **************************************
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        gameButtons.removeAll()
+//        gameButtons.removeAll()
 
         for subView in view.subviews{
             if subView is UIButton {
@@ -242,14 +246,14 @@ class SetViewController: UIViewController {
     }
     
     private func showButtons(){
-        for idx in 0..<gameButtons.count{
-            if idx < cardFaces.count{
-                gameButtons[idx].isHidden = false
-                gameButtons[idx].setAttributedTitle(cardFaces[idx], for: .normal)
-            } else{
-                gameButtons[idx].isHidden = true
-            }
-        }
+//        for idx in 0..<gameButtons.count{
+//            if idx < cardFaces.count{
+//                gameButtons[idx].isHidden = false
+//                gameButtons[idx].setAttributedTitle(cardFaces[idx], for: .normal)
+//            } else{
+//                gameButtons[idx].isHidden = true
+//            }
+//        }
     }
 
     private func addselectedCardToMatchingSet(_ sender:UIButton){
