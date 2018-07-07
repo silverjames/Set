@@ -10,16 +10,25 @@ import UIKit
 
 class SetViewController: UIViewController, cardViewDataSource {
 
+    // **************************************
+    // MARK: protocol functions
+    // **************************************
     func getGridDimensions() -> (rows: Int, columns: Int) {
-//        let cardCount = game.dealtCards.count
-        return (3,4)
+        let factor = abs(sqrt(Double(game.dealtCards.count)))
+
+        switch UIDevice.current.orientation {
+        case .portrait, .portraitUpsideDown:
+            return (Int(factor), game.dealtCards.count / Int(factor))
+        case .landscapeLeft, .landscapeRight:
+            return (game.dealtCards.count / Int(factor), Int(factor))
+        default:
+            return (Int(factor), game.dealtCards.count / Int(factor))
+        }
     }
-    
 
     // **************************************
     // MARK: outlets
     // **************************************
-
 
     @IBOutlet weak var dealButton: UIButton!
     
@@ -32,9 +41,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         }
     }
     @IBOutlet weak var test: UILabel!
-    
     @IBOutlet weak var score: UILabel!
-    
     @IBOutlet weak var cheatButton: UIButton!
 
     @IBAction func touchCard(_ sender: UIButton) {
