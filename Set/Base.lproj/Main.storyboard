@@ -93,6 +93,7 @@
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="cardView" destination="giy-3W-0NG" id="eMy-Db-V9K"/>
                         <outlet property="cheatButton" destination="Qse-3G-Nio" id="Wht-TX-RjA"/>
                         <outlet property="dealButton" destination="PmO-HR-6yg" id="x9A-TW-mKm"/>
                         <outlet property="score" destination="DD9-rS-olj" id="0iT-Zc-vFs"/>

@@ -8,7 +8,13 @@
 
 import UIKit
 
-class SetViewController: UIViewController {
+class SetViewController: UIViewController, cardViewDataSource {
+
+    func getGridDimensions() -> (rows: Int, columns: Int) {
+//        let cardCount = game.dealtCards.count
+        return (3,4)
+    }
+    
 
     // **************************************
     // MARK: outlets
@@ -17,8 +23,14 @@ class SetViewController: UIViewController {
 
     @IBOutlet weak var dealButton: UIButton!
     
-    @IBOutlet var gameButtons: [UIButton]!
-
+    var gameButtons = [UIButton]()
+    
+    @IBOutlet weak var cardView: CardView!{
+        didSet {
+            print("SVC: setting outlet")
+            cardView.dataSource = self
+        }
+    }
     @IBOutlet weak var test: UILabel!
     
     @IBOutlet weak var score: UILabel!
@@ -26,7 +38,8 @@ class SetViewController: UIViewController {
     @IBOutlet weak var cheatButton: UIButton!
 
     @IBAction func touchCard(_ sender: UIButton) {
-       if selectedCards.contains(where: {$0.value == sender }){
+        print ("card touched")
+        if selectedCards.contains(where: {$0.value == sender }){
             selectedCards.remove(at: selectedCards.firstIndex(where: {$0.value == sender })!)
             buttonFormatNotSelected(button: sender)
             game.score += Constants.deselectPoints
@@ -118,13 +131,12 @@ class SetViewController: UIViewController {
     // **************************************
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        gameButtons.removeAll()
-
+        
         for subView in view.subviews{
             if subView is UIButton {
                 let button = subView as! UIButton
@@ -135,31 +147,23 @@ class SetViewController: UIViewController {
                 button.layer.borderColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
                 button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16.0)
                 
-            } else{
-                if subView is UIStackView{
-                    for stackViews in subView.subviews{
-                        for view in stackViews.subviews{
-                            let button = view as! UIButton
-                            buttonFormatNotSelected(button: button)
-                            gameButtons.append(button)
-                        }
-                    }
-                }
-                if subView is UILabel{
-                    subView.layer.cornerRadius = 5
-                    subView.layer.borderWidth = 0.2
-                    subView.mask?.clipsToBounds = true
-                    subView.layer.borderColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
-                    subView.backgroundColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
-                    
-                }
+            }
+            if subView is UILabel{
+                subView.layer.cornerRadius = 5
+                subView.layer.borderWidth = 0.2
+                subView.mask?.clipsToBounds = true
+                subView.layer.borderColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
+                subView.backgroundColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
             }
         }
         printMessageForBernie()
         newGame()
     }
 
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
     // **************************************
     // MARK: private functions
     // **************************************
