@@ -169,7 +169,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         updateScore()
         print ("\(game.description)")
         render(howMany: game.dealtCards.count)
-        showButtons()
+        cardView.setNeedsLayout()
     }
 
     private func deal(){
@@ -181,7 +181,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         }
         render(howMany: game.dealtCards.count)
         cheatButton.isEnabled = checkForCheat()
-        showButtons()
+        cardView.setNeedsLayout()
     }
     
     private func checkForCheat () -> Bool{
@@ -252,17 +252,6 @@ class SetViewController: UIViewController, cardViewDataSource {
         return attributes!
     }
     
-    private func showButtons(){
-//        for idx in 0..<gameButtons.count{
-//            if idx < cardFaces.count{
-//                gameButtons[idx].isHidden = false
-//                gameButtons[idx].setAttributedTitle(cardFaces[idx], for: .normal)
-//            } else{
-//                gameButtons[idx].isHidden = true
-//            }
-//        }
-    }
-
     private func processMatch(matchSet:[SetCard]){
         for matches in selectedCards{
             let card = game.dealtCards.filter {$0.id == matches.key}
