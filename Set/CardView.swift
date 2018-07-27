@@ -8,50 +8,40 @@
 import UIKit
 
 protocol cardViewDataSource: class {
-    func getGridDimensions() -> (rows: Int, columns: Int)
+    func getGridDimensions() -> (cellCount: Int, aspectRatio: CGFloat)
+    func getDealtCards() -> [SetCard]
 }
 
 class CardView: UIView {
 
     //    *****************
-    //    MARK: properies
+    //    MARK: properties
     //    *****************
-    weak var dataSource:cardViewDataSource?
-    var gameButtons = [UIButton]()
 
-    static let insets = CGFloat(6.0)
-    let buttonInset = UIEdgeInsets.init(top: insets, left: insets, bottom: insets, right: insets)
-    
+    weak var delegate:cardViewDataSource?
+    var gameButtons = [UIButton]()
+    var grid = Grid(layout: .dimensions(rowCount: 1, columnCount: 1))
+    var animator:UIViewPropertyAnimator!
+    let buttonInset = UIEdgeInsets.init(top: Constants.insets, left: Constants.insets, bottom: Constants.insets, right: Constants.insets)
+
     //    *****************
     //    MARK: lifecycle Functions
     //    *****************
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        var grid = Grid(layout: .dimensions(rowCount: (dataSource?.getGridDimensions().rows)!, columnCount: (dataSource?.getGridDimensions().columns)!))
-
-        for view in self.subviews{
-            view.removeFromSuperview()
+        if let _ = animator {
+            if !animator.isRunning {
+                updateViewFromModel()
+            }
+        } else{
+            updateViewFromModel()
         }
-        
-        gameButtons.removeAll()
-        
-        grid.frame = self.bounds
 
-        for idx in 0 ..< grid.cellCount {
-            let button = UIButton()
-            button.setTitle("😀", for: .normal)
-            button.frame = grid[idx]!.inset(by: buttonInset)
-            button.backgroundColor = #colorLiteral(red: 0.1215686277, green: 0.01176470611, blue: 0.4235294163, alpha: 1)
-            button.isHidden = false
-            button.addTarget(dataSource, action: Selector(("touchCard:")), for: .touchUpInside)
-            self.addSubview(button)
-            gameButtons.append(button)
-        }
     }
 
-    override func draw(_ rect: CGRect) {
-    }
+//    override func draw(_ rect: CGRect) {
+//    }
 
     //    *****************
     //    MARK Functions
@@ -59,6 +49,30 @@ class CardView: UIView {
 //    @objc func touchCard(sender:UIButton){
 //        print("button pressed!")
 //    }
+    
+    func updateViewFromModel(){
+        
+        self.grid = Grid(layout: .aspectRatio(delegate!.getGridDimensions().aspectRatio))
+        grid.cellCount = (delegate!.getGridDimensions().cellCount)
+
+        for view in self.subviews{
+            view.removeFromSuperview()
+        }
+        gameButtons.removeAll()
+        grid.frame = self.bounds
+        
+        for idx in 0 ..< delegate!.getDealtCards().count {
+            let button = UIButton()
+            button.setTitle("😀", for: .normal)
+            button.frame = grid[idx]!.inset(by: buttonInset)
+            button.backgroundColor = #colorLiteral(red: 0.1215686277, green: 0.01176470611, blue: 0.4235294163, alpha: 1)
+            button.isHidden = false
+            button.addTarget(delegate, action: Selector(("touchCard:")), for: .touchUpInside)
+            self.addSubview(button)
+            gameButtons.append(button)
+        }
+
+    }
     
     func buttonFormatNotSelected(button: UIButton){
         button.layer.cornerRadius = 5
@@ -76,5 +90,8 @@ class CardView: UIView {
 //        button.setBackgroundImage(UIImage(named: "white")!, for: UIControl.State .normal)
     }
 
+}
 
+private struct Constants{
+    static let insets = CGFloat(6.0)
 }

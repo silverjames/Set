@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/bernhard/Developer/Set/Set/Set/CardView.swift">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/bernhard/Developer/Set/Set/Set/Grid.swift">
-   </FileRef>
-   <FileRef
       location = "self:">
    </FileRef>
 </Workspace>

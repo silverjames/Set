@@ -7,35 +7,38 @@
 //
 
 import UIKit
+import AVFoundation
 
 class SetViewController: UIViewController, cardViewDataSource {
 
     // **************************************
-    // MARK: protocol functions
+    // MARK: private properties
     // **************************************
-    func getGridDimensions() -> (rows: Int, columns: Int) {
-        let factor = abs(sqrt(Double(game.dealtCards.count)))
-
-        switch UIDevice.current.orientation {
-        case .portrait, .portraitUpsideDown:
-            return (Int(factor), game.dealtCards.count / Int(factor))
-        case .landscapeLeft, .landscapeRight:
-            return (game.dealtCards.count / Int(factor), Int(factor))
-        default:
-            return (Int(factor), game.dealtCards.count / Int(factor))
+    private lazy var game:SetCardGame = SetCardGame()
+    private var cardFaces = [NSAttributedString]()
+    private var selectedCards = [Int:UIButton]()
+    private var matchPoints:Int {
+        get {
+            return (GameConstants.maxCardsOnTable*2)/game.dealtCards.count + 1
         }
     }
+    private var validSymbols:[String] {
+        return ["▲", "■", "●"]
+    }
+    private lazy var cheatSet = [SetCard]()
+    private let tapSound = SystemSoundID(1105)
+    private let newGameSound = SystemSoundID(1108)
+    private let matchSound = SystemSoundID(1024)
 
     // **************************************
     // MARK: outlets and functions
     // **************************************
 
     @IBOutlet weak var dealButton: UIButton!
-    
     @IBOutlet weak var cardView: CardView!{
         didSet {
             print("SVC: setting outlet")
-            cardView.dataSource = self
+            cardView.delegate = self
         }
     }
     @IBOutlet weak var test: UILabel!
@@ -43,10 +46,12 @@ class SetViewController: UIViewController, cardViewDataSource {
     @IBOutlet weak var cheatButton: UIButton!
  
     @IBAction func newGame(_ sender: UIButton) {
+        AudioServicesPlaySystemSound(newGameSound)
         newGame()
     }
     
     @IBAction func deal(_ sender: UIButton) {
+        AudioServicesPlaySystemSound(tapSound)
         deal()
     }
 
@@ -64,7 +69,8 @@ class SetViewController: UIViewController, cardViewDataSource {
     }
     
     @objc func touchCard(_ sender: UIButton) {
-        print ("card touched")
+//        print ("card touched")
+        AudioServicesPlaySystemSound(tapSound)
         if selectedCards.contains(where: {$0.value == sender }){
             selectedCards.remove(at: selectedCards.firstIndex(where: {$0.value == sender })!)
             cardView.buttonFormatNotSelected(button: sender)
@@ -88,6 +94,7 @@ class SetViewController: UIViewController, cardViewDataSource {
                 
                 if game.match(keysToMatch: matchSet){
                     print("cards matched!")
+                    AudioServicesPlaySystemSound(matchSound)
                     _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: {_ in self.processMatch(matchSet: matchSet)})
                 } else {
                     print("cards did not match!")
@@ -99,29 +106,16 @@ class SetViewController: UIViewController, cardViewDataSource {
             }
         }
     }
-
-
-
-    // **************************************
-    // MARK: private properties
-    // **************************************
-    private lazy var game:SetCardGame = SetCardGame()
-    private var cardFaces = [NSAttributedString]()
-    private var selectedCards = [Int:UIButton]()
-
     
-    private var matchPoints:Int {
-        get {
-            return (Constants.maxCardsOnTable*2)/game.dealtCards.count + 1
-        }
+    // **************************************
+    // MARK: protocol functions
+    // **************************************
+    func getGridDimensions() -> (cellCount: Int, aspectRatio: CGFloat) {
+        return (game.dealtCards.count, CGFloat(Constants.defaultAspectRatio))
     }
-
-    private var validSymbols:[String] {
-        return ["▲", "■", "●"]
+    func getDealtCards() -> [SetCard] {
+        return game.dealtCards
     }
-    
-    private lazy var cheatSet = [SetCard]()
-
     
     // **************************************
     // MARK: view lifecycle functions
@@ -174,7 +168,7 @@ class SetViewController: UIViewController, cardViewDataSource {
 
     private func deal(){
         game.deal()
-        if game.dealtCards.count == Constants.maxCardsOnTable{
+        if game.dealtCards.count == GameConstants.maxCardsOnTable{
             dealButton.isEnabled = false
         } else{
             dealButton.isEnabled = true
@@ -203,7 +197,15 @@ class SetViewController: UIViewController, cardViewDataSource {
         }
         return cheatFound
     }
-    
+    private func addselectedCardToMatchingSet(_ sender:UIButton){
+        let idx = game.dealtCards[cardView.gameButtons.firstIndex(of: sender)!].id
+        print("added card \(String(describing: idx))")
+        selectedCards[idx] = sender
+        sender.layer.borderWidth = 3.0
+        sender.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)
+    }
+
+
     private func render(howMany:Int){
         cardFaces.removeAll()
         
@@ -214,14 +216,6 @@ class SetViewController: UIViewController, cardViewDataSource {
             }
             cardFaces.append(NSAttributedString(string: symbols, attributes: {getAttributes(card.decoration)}() as [NSAttributedString.Key : Any]))
         }
-    }
-    
-    private func addselectedCardToMatchingSet(_ sender:UIButton){
-        let idx = game.dealtCards[cardView.gameButtons.firstIndex(of: sender)!].id
-        print("added card \(String(describing: idx))")
-        selectedCards[idx] = sender
-        sender.layer.borderWidth = 3.0
-        sender.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)
     }
     
     private func getAttributes (_ deco: [Int]) -> [NSAttributedString.Key: Any?]{
@@ -286,4 +280,11 @@ class SetViewController: UIViewController, cardViewDataSource {
         test.attributedText = (NSAttributedString(string:"Bernie was here...", attributes:attributes as [NSAttributedString.Key : Any]))
     }
 }
-
+//MARK: need to re-dupe the constants
+private struct Constants {
+    static let mismatchPoints = -2
+    static let matchPoints = 5
+    static let deselectPoints = -1
+    static let defaultAspectRatio = 1.0
+    static let timerInterval = 1.2
+}
