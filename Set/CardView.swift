@@ -1,122 +1,100 @@
 //
 //  CardView.swift
-//  
+//  Set
 //
-//  Created by Bernhard F. Kraft on 06.07.18.
+//  Created by Bernhard F. Kraft on 28.07.18.
+//  Copyright © 2018 Bernhard F. Kraft. All rights reserved.
 //
 
 import UIKit
 
-protocol cardViewDataSource: class {
-    func getGridDimensions() -> (cellCount: Int, aspectRatio: CGFloat)
-    func getDealtCards() -> [SetCard]
-}
-
 class CardView: UIView {
 
+    enum cColor: Int{
+        case green = 0, red, blue
+    }
+    enum cShape: Int{
+        case circle = 0, diamond, squiggle
+    }
+    enum cFill: Int{
+        case unfilled = 0, striped, solid
+    }
+    enum cNumber: Int{
+        case one = 0, two, three
+    }
     //    *****************
     //    MARK: properties
     //    *****************
-
-    weak var delegate:cardViewDataSource?
-    var gameButtons = [UIButton]()
-    var grid = Grid(layout: .dimensions(rowCount: 1, columnCount: 1))
-    var animator:UIViewPropertyAnimator!
-    let buttonInset = UIEdgeInsets.init(top: Constants.insets, left: Constants.insets, bottom: Constants.insets, right: Constants.insets)
-
-    //    *****************
-    //    MARK: lifecycle Functions
-    //    *****************
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        if let _ = animator {
-            if !animator.isRunning {
-                updateViewFromModel()
-            }
-        } else{
-            updateViewFromModel()
-        }
-
+    var cardNumber:cNumber
+    var cardShape:cShape
+    var cardFill:cFill
+    var cardColor:cColor
+    
+    //    *******************************
+    //    MARK: class overrides
+    //    *******************************
+    override init (frame:CGRect) {
+        self.cardNumber = .one
+        self.cardShape = .circle
+        self.cardFill = .solid
+        self.cardColor = .red
+        super.init(frame : frame)
+    }
+    convenience init (frame:CGRect, cardNumber number:Int, cardShape shape:Int, cardFill fill:Int, cardColor color:Int) {
+        self.init(frame: frame)
+        self.cardNumber = cNumber(rawValue: number)!
+        self.cardShape = cShape(rawValue: shape)!
+        self.cardFill = cFill(rawValue: fill)!
+        self.cardColor = cColor(rawValue: color)!
+        self.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.isHidden = false
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        self.cardNumber = .one
+        self.cardShape = .circle
+        self.cardFill = .solid
+        self.cardColor = .red
+        super.init(coder: aDecoder)
     }
 
     override func draw(_ rect: CGRect) {
 
-        UIColor.green.setFill()
-        UIColor.blue.setStroke()
-        var shapeFunction: (CGRect) -> UIBezierPath
+        //draw card border and background
+        let cardBorderColor:UIColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        let cardBackgroundColor:UIColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        let cardUIborder = UIBezierPath(roundedRect: self.bounds, cornerRadius: CardRatios.cardCornerRadius)
+        cardBorderColor.setStroke()
+        cardBackgroundColor.setFill()
+        cardUIborder.stroke()
+        cardUIborder.fill()
+//        print ("card frame: \(self.frame)")
+//        print ("card bounds: \(self.bounds)")
 
-        for idx in 0 ..< delegate!.getDealtCards().count {
-            shapeFunction = {
-                switch self.delegate!.getDealtCards()[idx].decoration[1] {
-                case 0:
-                    return self.createCircle($0)
-                case 1:
-                    return self.createDiamond($0)
-                case 2:
-                    return self.createOval($0)
-                default:
-                    return self.createCircle($0)
-                }
-            }//shape function closure
- 
-            let button = UIButton()
-            button.frame = grid[idx]!.inset(by: buttonInset)
-            button.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-            button.isHidden = false
 
-            let shapeToDraw = shapeFunction(button.frame)
-            shapeToDraw.stroke()
-            shapeToDraw.fill()
-
-            button.addTarget(delegate, action: Selector(("touchCard:")), for: .touchUpInside)
-            self.addSubview(button)
-            gameButtons.append(button)
-
-//        let cages = Grid.init(layout:.dimensions(rowCount: getDimensionsForCell(rect).rowCount, columnCount: getDimensionsForCell(rect).columnCount) , frame: rect)
-//        for idx in 0..<cages.cellCount{
-//            let shapeToDraw = shapeFunction(cages[idx]!)
-//            shapeToDraw.stroke()
-//            shapeToDraw.fill()
-//        }
-
-        }//for loop: dealt cards
-    }//func
-
-    //    *****************
-    //    MARK Functions
-    //    *****************
-    
-    private func updateViewFromModel(){
+        // Draw card face
+//        var shapeFunction: (CGRect) -> UIBezierPath
+//        let cages = Grid.init(layout:.dimensions(rowCount: 3, columnCount: 1) , frame: self.bounds)
+//
+//        shapeFunction = {
+//            switch self.cardShape {
+//            case .circle:
+//                return self.createCircle($0)
+//            case .diamond:
+//                return self.createDiamond($0)
+//            case .squiggle:
+//                return self.createOval($0)
+//            }
+//        }//shape function closure
         
-        self.grid = Grid(layout: .aspectRatio(delegate!.getGridDimensions().aspectRatio))
-        grid.cellCount = (delegate!.getGridDimensions().cellCount)
+        
+        
+    }//draw rect
 
-        for view in self.subviews{
-            view.removeFromSuperview()
-        }
-        gameButtons.removeAll()
-        grid.frame = self.bounds
-//        self.setNeedsDisplay()
-
-    }
-    
-    func buttonFormatNotSelected(button: UIButton){
-        button.layer.cornerRadius = 5
-        button.layer.borderWidth = 0.2
-        button.mask?.clipsToBounds = true
-        button.layer.borderColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
-//        button.setBackgroundImage(UIImage(named: "white")!, for: UIControl.State .normal)
-    }
-    
-    func buttonFormatSelected(button: UIButton){
-        button.layer.cornerRadius = 5
-        button.layer.borderWidth = 3.0
-        button.mask?.clipsToBounds = true
-        button.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)
-//        button.setBackgroundImage(UIImage(named: "white")!, for: UIControl.State .normal)
-    }
-    
+    //    *******************************
+    //    MARK: class functions
+    //    *******************************
     private func createDiamond(_ rect: CGRect) -> UIBezierPath{
         let diamond = UIBezierPath()
         let axis = (min(rect.width, rect.height) * 0.9)/2
@@ -160,26 +138,22 @@ class CardView: UIView {
         return circle
     }
 
-}
-
-private struct Constants{
-    static let insets = CGFloat(6.0)
-}
-
-extension CardView{
-    private struct SetViewRatios {
-        static let frameInsetRatio: CGFloat = 0.08
-        static let maxSymbolsPerCard = 3
+    private func getCenter (_ rect:CGRect) -> CGPoint{
+        return CGPoint(x: rect.midX, y: rect.midY)
     }
-    
     private func cardInset (_ rect: CGRect) -> CGFloat{
-        return (rect.width + rect.height)/2 * SetViewRatios.frameInsetRatio
+        return (rect.width + rect.height)/2 * CardRatios.frameInsetRatio
     }
     private func symbolBounds (_ bounds: CGRect) -> CGRect{
         let symbolFrame = bounds.inset(by: UIEdgeInsets.init(top: cardInset(bounds), left: cardInset(bounds), bottom: cardInset(bounds), right: cardInset(bounds)))
         return symbolFrame
     }
-    private func getCenter (_ rect:CGRect) -> CGPoint{
-        return CGPoint(x: rect.midX, y: rect.midY)
+
+    private struct CardRatios {
+        static let frameInsetRatio: CGFloat = 0.08
+        static let maxSymbolsPerCard = 3
+        static let cardCornerRadius:CGFloat = 5.0
+        static let insets = CGFloat(6.0)
+        static let cagesPerButton = 3
     }
 }

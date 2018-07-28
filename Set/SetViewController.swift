@@ -16,7 +16,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     // **************************************
     private lazy var game:SetCardGame = SetCardGame()
     private var cardFaces = [NSAttributedString]()
-    private var selectedCards = [Int:UIButton]()
+    private var selectedCards = [Int:CardView]()
     private var matchPoints:Int {
         get {
             return (GameConstants.maxCardsOnTable*2)/game.dealtCards.count + 1
@@ -35,9 +35,8 @@ class SetViewController: UIViewController, cardViewDataSource {
     // **************************************
 
     @IBOutlet weak var dealButton: UIButton!
-    @IBOutlet weak var cardView: CardView!{
+    @IBOutlet weak var cardView: CardSetView!{
         didSet {
-            print("SVC: setting outlet")
             cardView.delegate = self
         }
     }
@@ -59,7 +58,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         selectedCards.removeAll(keepingCapacity: true)
 
         for card in cheatSet {
-            addselectedCardToMatchingSet(cardView.gameButtons[game.dealtCards.firstIndex(of: card)!])
+            addselectedCardToMatchingSet(cardView.gameCards[game.dealtCards.firstIndex(of: card)!])
         }
         _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: {_ in self.processMatch(matchSet: self.cheatSet)})
         
@@ -68,12 +67,12 @@ class SetViewController: UIViewController, cardViewDataSource {
         updateScore()
     }
     
-    @objc func touchCard(_ sender: UIButton) {
+    @objc func touchCard(_ sender: CardView) {
 //        print ("card touched")
         AudioServicesPlaySystemSound(tapSound)
         if selectedCards.contains(where: {$0.value == sender }){
             selectedCards.remove(at: selectedCards.firstIndex(where: {$0.value == sender })!)
-            cardView.buttonFormatNotSelected(button: sender)
+            cardView.cardUIFormatNotSelected(cardUI: sender)
             game.score += Constants.deselectPoints
             updateScore()
             
@@ -111,7 +110,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     // MARK: protocol functions
     // **************************************
     func getGridDimensions() -> (cellCount: Int, aspectRatio: CGFloat) {
-        return (game.dealtCards.count, CGFloat(Constants.defaultAspectRatio))
+        return (game.dealtCards.count, Constants.defaultAspectRatio)
     }
     func getDealtCards() -> [SetCard] {
         return game.dealtCards
@@ -164,6 +163,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         print ("\(game.description)")
         render(howMany: game.dealtCards.count)
         cardView.setNeedsLayout()
+        cardView.setNeedsDisplay()
     }
 
     private func deal(){
@@ -176,6 +176,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         render(howMany: game.dealtCards.count)
         cheatButton.isEnabled = checkForCheat()
         cardView.setNeedsLayout()
+        cardView.setNeedsDisplay()
     }
     
     private func checkForCheat () -> Bool{
@@ -197,8 +198,8 @@ class SetViewController: UIViewController, cardViewDataSource {
         }
         return cheatFound
     }
-    private func addselectedCardToMatchingSet(_ sender:UIButton){
-        let idx = game.dealtCards[cardView.gameButtons.firstIndex(of: sender)!].id
+    private func addselectedCardToMatchingSet(_ sender:CardView){
+        let idx = game.dealtCards[cardView.gameCards.firstIndex(of: sender)!].id
         print("added card \(String(describing: idx))")
         selectedCards[idx] = sender
         sender.layer.borderWidth = 3.0
@@ -251,7 +252,7 @@ class SetViewController: UIViewController, cardViewDataSource {
             let card = game.dealtCards.filter {$0.id == matches.key}
             game.dealtCards.remove(at: game.dealtCards.lastIndex(of: card.first!)!)
             game.matchedCards.append(card.first!)
-            cardView.buttonFormatNotSelected(button: matches.value)
+            cardView.cardUIFormatNotSelected(cardUI: matches.value)
         }
         game.score += matchPoints
         updateScore()
@@ -261,7 +262,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     
     private func processMismatch(matchSet:[SetCard]){
         for matches in selectedCards{
-            cardView.buttonFormatNotSelected(button: matches.value)
+            cardView.cardUIFormatNotSelected(cardUI: matches.value)
         }
         game.score += Constants.mismatchPoints
         updateScore()
@@ -285,6 +286,6 @@ private struct Constants {
     static let mismatchPoints = -2
     static let matchPoints = 5
     static let deselectPoints = -1
-    static let defaultAspectRatio = 1.0
+    static let defaultAspectRatio:CGFloat = 5/8
     static let timerInterval = 1.2
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14295.6" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14306.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14270.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14278.2"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -63,12 +63,12 @@
                                     <action selector="newGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YVO-Nw-j51"/>
                                 </connections>
                             </button>
-                            <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="giy-3W-0NG" customClass="CardView" customModule="Set" customModuleProvider="target">
-                                <rect key="frame" x="16" y="20" width="343" height="555"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="giy-3W-0NG" customClass="CardSetView" customModule="Set" customModuleProvider="target">
+                                <rect key="frame" x="16" y="36" width="343" height="539"/>
+                                <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.55988609790802002" green="0.91546624898910522" blue="0.71463149785995483" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="DD9-rS-olj" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="3jr-hN-3cl"/>
                             <constraint firstItem="DD9-rS-olj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="6LV-iK-gpc"/>
@@ -76,7 +76,7 @@
                             <constraint firstItem="PmO-HR-6yg" firstAttribute="top" secondItem="DD9-rS-olj" secondAttribute="bottom" constant="8" symbolic="YES" id="6xw-o9-1wB"/>
                             <constraint firstItem="giy-3W-0NG" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="8XU-ny-60m"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PmO-HR-6yg" secondAttribute="trailing" constant="16" id="Fhv-rb-rNq"/>
-                            <constraint firstItem="giy-3W-0NG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="KDb-Zy-9rP"/>
+                            <constraint firstItem="giy-3W-0NG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="KDb-Zy-9rP"/>
                             <constraint firstItem="B5y-nB-NKm" firstAttribute="top" secondItem="Qse-3G-Nio" secondAttribute="bottom" constant="8" symbolic="YES" id="M91-3q-Y0G"/>
                             <constraint firstItem="giy-3W-0NG" firstAttribute="leading" secondItem="mWa-n9-viu" secondAttribute="leading" id="NCJ-Fw-bOW"/>
                             <constraint firstItem="PmO-HR-6yg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Qse-3G-Nio" secondAttribute="trailing" constant="16" id="Pae-pi-62I"/>
