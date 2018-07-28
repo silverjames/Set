@@ -69,24 +69,21 @@ class CardView: UIView {
         cardBackgroundColor.setFill()
         cardUIborder.stroke()
         cardUIborder.fill()
-//        print ("card frame: \(self.frame)")
-//        print ("card bounds: \(self.bounds)")
-
 
         // Draw card face
-//        var shapeFunction: (CGRect) -> UIBezierPath
-//        let cages = Grid.init(layout:.dimensions(rowCount: 3, columnCount: 1) , frame: self.bounds)
-//
-//        shapeFunction = {
-//            switch self.cardShape {
-//            case .circle:
-//                return self.createCircle($0)
-//            case .diamond:
-//                return self.createDiamond($0)
-//            case .squiggle:
-//                return self.createOval($0)
-//            }
-//        }//shape function closure
+        var shapeFunction: (CGRect) -> UIBezierPath
+        let cages = Grid.init(layout:.dimensions(rowCount: 3, columnCount: 1) , frame: self.bounds)
+
+        shapeFunction = {
+            switch self.cardShape {
+            case .circle:
+                return self.createCircle($0)
+            case .diamond:
+                return self.createDiamond($0)
+            case .squiggle:
+                return self.createOval($0)
+            }
+        }//shape function closure
         
         
         
@@ -152,7 +149,7 @@ class CardView: UIView {
     private struct CardRatios {
         static let frameInsetRatio: CGFloat = 0.08
         static let maxSymbolsPerCard = 3
-        static let cardCornerRadius:CGFloat = 5.0
+        static let cardCornerRadius:CGFloat = 8.0
         static let insets = CGFloat(6.0)
         static let cagesPerButton = 3
     }

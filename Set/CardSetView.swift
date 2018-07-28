@@ -62,9 +62,9 @@ class CardSetView: UIView {
                                   cardShape: delegate!.getDealtCards()[idx].decoration[1],
                                   cardFill: delegate!.getDealtCards()[idx].decoration[2],
                                   cardColor: delegate!.getDealtCards()[idx].decoration[3])
-            
+            let tap = UITapGestureRecognizer(target: delegate!, action: #selector(SetViewController.touchCard(_:)))
+            cardUI.addGestureRecognizer(tap)
             cardUI.isHidden = false
-            //            cardUI.addTarget(delegate, action: Selector(("touchCard:")), for: .touchUpInside)
             self.addSubview(cardUI)
             gameCards.append(cardUI)
         }

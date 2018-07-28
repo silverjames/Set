@@ -67,12 +67,13 @@ class SetViewController: UIViewController, cardViewDataSource {
         updateScore()
     }
     
-    @objc func touchCard(_ sender: CardView) {
-//        print ("card touched")
+    @objc func touchCard(_ sender: UITapGestureRecognizer) {
+        print ("card touched")
+        let card = sender.view! as! CardView
         AudioServicesPlaySystemSound(tapSound)
         if selectedCards.contains(where: {$0.value == sender }){
             selectedCards.remove(at: selectedCards.firstIndex(where: {$0.value == sender })!)
-            cardView.cardUIFormatNotSelected(cardUI: sender)
+            cardView.cardUIFormatNotSelected(cardUI: card)
             game.score += Constants.deselectPoints
             updateScore()
             
@@ -80,10 +81,10 @@ class SetViewController: UIViewController, cardViewDataSource {
             switch selectedCards.count{
                 
             case 0,1:
-                addselectedCardToMatchingSet(sender)
+                addselectedCardToMatchingSet(card)
                 
             case 2:
-                addselectedCardToMatchingSet(sender)
+                addselectedCardToMatchingSet(card)
                 var matchSet = [SetCard]()
                 for cardID in selectedCards.keys{
                     if let card = game.dealtCards.first(where: {$0.id == cardID}){
@@ -199,6 +200,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         return cheatFound
     }
     private func addselectedCardToMatchingSet(_ sender:CardView){
+        print ("\(sender)")
         let idx = game.dealtCards[cardView.gameCards.firstIndex(of: sender)!].id
         print("added card \(String(describing: idx))")
         selectedCards[idx] = sender
