@@ -135,7 +135,7 @@ extension Array where Element:Hashable {
 
 struct GameConstants {
     static let featureRange:CountableClosedRange = 0...2
-    static let initialDealSize = 12
+    static let initialDealSize = 12 //mark: debug
     static let dealSize = 3
     static let maxCardsOnTable = 81
     static let mismatchPoints = -4

@@ -19,7 +19,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     private var selectedCards = [Int:CardView]()
     private var matchPoints:Int {
         get {
-            return (GameConstants.maxCardsOnTable*2)/game.dealtCards.count + 1
+            return (GameConstants.maxCardsOnTable)/game.dealtCards.count + 1
         }
     }
     private var validSymbols:[String] {
@@ -73,7 +73,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         AudioServicesPlaySystemSound(tapSound)
         if selectedCards.contains(where: {$0.value == sender }){
             selectedCards.remove(at: selectedCards.firstIndex(where: {$0.value == sender })!)
-            cardView.cardUIFormatNotSelected(cardUI: card)
+            card.selected = false
             game.score += Constants.deselectPoints
             updateScore()
             
@@ -162,7 +162,6 @@ class SetViewController: UIViewController, cardViewDataSource {
         cheatButton.isEnabled = checkForCheat()
         updateScore()
         print ("\(game.description)")
-        render(howMany: game.dealtCards.count)
         cardView.setNeedsLayout()
         cardView.setNeedsDisplay()
     }
@@ -174,7 +173,6 @@ class SetViewController: UIViewController, cardViewDataSource {
         } else{
             dealButton.isEnabled = true
         }
-        render(howMany: game.dealtCards.count)
         cheatButton.isEnabled = checkForCheat()
         cardView.setNeedsLayout()
         cardView.setNeedsDisplay()
@@ -200,53 +198,11 @@ class SetViewController: UIViewController, cardViewDataSource {
         return cheatFound
     }
     private func addselectedCardToMatchingSet(_ sender:CardView){
-        print ("\(sender)")
+//        print ("\(sender)")
         let idx = game.dealtCards[cardView.gameCards.firstIndex(of: sender)!].id
         print("added card \(String(describing: idx))")
         selectedCards[idx] = sender
-        sender.layer.borderWidth = 3.0
-        sender.layer.borderColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)
-    }
-
-
-    private func render(howMany:Int){
-        cardFaces.removeAll()
-        
-        for card in game.dealtCards{
-            var symbols=""
-            for _ in 0...card.decoration[0]{
-                    symbols.append(validSymbols[card.decoration[1]])
-            }
-            cardFaces.append(NSAttributedString(string: symbols, attributes: {getAttributes(card.decoration)}() as [NSAttributedString.Key : Any]))
-        }
-    }
-    
-    private func getAttributes (_ deco: [Int]) -> [NSAttributedString.Key: Any?]{
-        var attributes: [NSAttributedString.Key:Any]? = nil
-        let color:UIColor
-        
-        switch deco[3] {
-        case 0:
-            color = UIColor.red
-        case 1:
-            color = UIColor.green
-        case 2:
-            color = UIColor.blue
-        default:
-            color = UIColor.gray
-        }
-        switch deco[2] {
-        case 0:
-            attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(22), .foregroundColor: color, .strokeWidth: -5.0]
-        case 1:
-            attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(22), .foregroundColor: color.withAlphaComponent(0.2), .strokeWidth: -5.0]
-        case 2:
-            attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(22), .foregroundColor: color.withAlphaComponent(1.0), .strokeWidth: 5.0]
-        default:
-            break
-        }
-
-        return attributes!
+        sender.selected = true
     }
     
     private func processMatch(matchSet:[SetCard]){
@@ -254,7 +210,7 @@ class SetViewController: UIViewController, cardViewDataSource {
             let card = game.dealtCards.filter {$0.id == matches.key}
             game.dealtCards.remove(at: game.dealtCards.lastIndex(of: card.first!)!)
             game.matchedCards.append(card.first!)
-            cardView.cardUIFormatNotSelected(cardUI: matches.value)
+            matches.value.selected = false
         }
         game.score += matchPoints
         updateScore()
@@ -264,7 +220,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     
     private func processMismatch(matchSet:[SetCard]){
         for matches in selectedCards{
-            cardView.cardUIFormatNotSelected(cardUI: matches.value)
+            matches.value.selected = false
         }
         game.score += Constants.mismatchPoints
         updateScore()
