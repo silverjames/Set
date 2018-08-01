@@ -209,14 +209,6 @@ class CardView: UIView {
         return squiggle
     }
 
-//    private func createCircle(_ rect: CGRect) -> UIBezierPath{
-//        let circle = UIBezierPath()
-//        let center = getCenter(rect)
-//        let radius = min(rect.width, rect.height)/2 * 0.9
-//        circle.addArc(withCenter: center, radius: radius, startAngle: 0.0, endAngle: 2*CGFloat.pi, clockwise: false)
-//        return circle
-//    }
-
     private func getCenter (_ rect:CGRect) -> CGPoint{
         return CGPoint(x: rect.midX, y: rect.midY)
     }
@@ -225,41 +217,41 @@ class CardView: UIView {
     }
 
     private struct CardRatios {
-        static let symbolLineWidth: CGFloat = 3.0
+        static let symbolLineWidth: CGFloat = 2.0
         static let frameInsetRatio: CGFloat = 0.08
         static let cardCornerRadius:CGFloat = 8.0
         static let cardBorderLineWidth:CGFloat = 4.0
         static let diamondfactor:CGFloat = 0.7
         static let insets = CGFloat(4.0)
-        static let p1_dx = CGFloat(0.5092592592592593)
-        static let p1_dy = CGFloat(0.2814207650273224)
-        static let p2_dx = CGFloat(0.6944444444444444)
-        static let p2_dy = CGFloat(0.22131147540983606)
-        static let p3_dx = CGFloat(0.7530864197530864)
-        static let p3_dy = CGFloat(0.27049180327868855)
-        static let p4_dx = CGFloat(0.6280864197530864)
-        static let p4_dy = CGFloat(0.5437158469945356)
-        static let p5_dx = CGFloat(0.23148148148148148)
-        static let p5_dy = CGFloat(0.6092896174863388)
-        static let p6_dx = CGFloat(0.18518518518518517)
-        static let p6_dy = CGFloat(0.4098360655737705)
-        static let cp1_dx = CGFloat(0.6172839506172839)
-        static let cp1_dy = CGFloat(0.3224043715846995)
-        static let cp2_dx = CGFloat(0.7407407407407407)
-        static let cp2_dy = CGFloat(0.17759562841530055)
-        static let cp3_dx = CGFloat(0.7669753086419753)
-        static let cp3_dy = CGFloat(0.32786885245901637)
-        static let cp4_dx = CGFloat(0.7160493827160493)
-        static let cp4_dy = CGFloat(0.546448087431694)
-        static let cp5_dx = CGFloat(0.42746913580246915)
-        static let cp5_dy = CGFloat(0.5519125683060109)
-        static let cp6_dx = CGFloat(0.41975308641975306)
-        static let cp6_dy = CGFloat(0.4098360655737705)
-        static let cp7_dx = CGFloat(0.16358024691358025)
-        static let cp7_dy = CGFloat(0.6311475409836066)
-        static let cp8_dx = CGFloat(0.21296296296296297)
-        static let cp8_dy = CGFloat(0.2677595628415301)
-        static let cp9_dx = CGFloat(0.27314814814814814)
-        static let cp9_dy = CGFloat(0.1092896174863388)
+       static let p1_dx = CGFloat(0.5092592592592593)
+       static let p1_dy = CGFloat(0.15300546448087432)
+       static let p2_dx = CGFloat(0.8734567901234568)
+       static let p2_dy = CGFloat(0.13114754098360656)
+       static let p3_dx = CGFloat(0.9583333333333334)
+       static let p3_dy = CGFloat(0.27049180327868855)
+       static let p4_dx = CGFloat(0.7222222222222222)
+       static let p4_dy = CGFloat(0.7049180327868853)
+       static let p5_dx = CGFloat(0.18209876543209877)
+       static let p5_dy = CGFloat(0.7486338797814208)
+       static let p6_dx = CGFloat(0.047839506172839504)
+       static let p6_dy = CGFloat(0.5737704918032787)
+       static let cp1_dx = CGFloat(0.7592592592592593)
+       static let cp1_dy = CGFloat(0.273224043715847)
+       static let cp2_dx = CGFloat(0.9722222222222222)
+       static let cp2_dy = CGFloat(0.030054644808743168)
+       static let cp3_dx = CGFloat(0.9212962962962963)
+       static let cp3_dy = CGFloat(0.587431693989071)
+       static let cp4_dx = CGFloat(0.7916666666666666)
+       static let cp4_dy = CGFloat(0.7404371584699454)
+       static let cp5_dx = CGFloat(0.38580246913580246)
+       static let cp5_dy = CGFloat(0.5136612021857924)
+       static let cp6_dx = CGFloat(0.2191358024691358)
+       static let cp6_dy = CGFloat(0.6885245901639344)
+       static let cp7_dx = CGFloat(0.046296296296296294)
+       static let cp7_dy = CGFloat(0.9781420765027322)
+       static let cp8_dx = CGFloat(0.06018518518518518)
+       static let cp8_dy = CGFloat(0.1885245901639344)
+       static let cp9_dx = CGFloat(0.19135802469135801)
+       static let cp9_dy = CGFloat(0.03551912568306011)
     }
 }
