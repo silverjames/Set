@@ -9,8 +9,6 @@
 import Foundation
 
 class SetCardGame: CustomStringConvertible {
-    
-
     //  **************************************
     // MARK: API properties
     //  **************************************
@@ -41,11 +39,11 @@ class SetCardGame: CustomStringConvertible {
     // MARK: API functions
     //  **************************************
     init(){
-        _ = newGame()
+        newGame()
     }
     
     func deal(){
-        dealCards(numberToDeal:Constants.dealSize)
+        dealCards(numberToDeal:GameConstants.dealSize)
     }
     
     func newGame(){
@@ -55,7 +53,7 @@ class SetCardGame: CustomStringConvertible {
         score = 0
         generateCards()
         setGame.shuffle()
-        dealCards(numberToDeal: Constants.initialDealSize)
+        dealCards(numberToDeal: GameConstants.initialDealSize)
     }
     
     func match(keysToMatch:[SetCard]) -> Bool{
@@ -85,10 +83,10 @@ class SetCardGame: CustomStringConvertible {
     //  MARK: private functions
     //  **************************************
     private func generateCards(){
-        for numbers in Constants.featureRange{
-            for shapes in Constants.featureRange{
-                for shadings in Constants.featureRange{
-                    for colors in Constants.featureRange{
+        for numbers in GameConstants.featureRange{
+            for shapes in GameConstants.featureRange{
+                for shadings in GameConstants.featureRange{
+                    for colors in GameConstants.featureRange{
                         let card = SetCard.init()
                         card.decoration = [numbers, shapes, shadings, colors]
                         setGame.append(card)
@@ -99,7 +97,7 @@ class SetCardGame: CustomStringConvertible {
     }
 
     private func dealCards(numberToDeal:Int){
-        if dealtCards.count + numberToDeal <= Constants.maxCardsOnTable{
+        if dealtCards.count + numberToDeal <= GameConstants.maxCardsOnTable{
             if setGame.count >= numberToDeal {
                 for _ in 0...numberToDeal-1{
                     let card = setGame.remove(at: Int(setGame.count).arc4Random)
@@ -135,11 +133,11 @@ extension Array where Element:Hashable {
     }
 }
 
-struct Constants {
+struct GameConstants {
     static let featureRange:CountableClosedRange = 0...2
-    static let initialDealSize = 12
+    static let initialDealSize = 12 //mark: debug
     static let dealSize = 3
-    static let maxCardsOnTable = 24
+    static let maxCardsOnTable = 81
     static let mismatchPoints = -4
     static let cheatPoints = -5
     static let deselectPoints = -1
