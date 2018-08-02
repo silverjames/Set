@@ -30,6 +30,7 @@ class CardView: UIView {
     var cardFill:cFill
     var cardColor:cColor
     var selected:Bool = false {didSet {setNeedsDisplay()}}
+    var isFaceUp:Bool = false {didSet {setNeedsDisplay()}}
     private let setSymbolInset = UIEdgeInsets.init(top: CardRatios.insets, left: CardRatios.insets, bottom: CardRatios.insets, right: CardRatios.insets)
 
     //    *******************************
@@ -62,7 +63,7 @@ class CardView: UIView {
     }
 
     override func draw(_ rect: CGRect) {
-        print ("cv: draw")
+//        print ("cv: draw")
         //draw card border and background
         let cardBorderColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
         var cardBackgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
@@ -76,11 +77,23 @@ class CardView: UIView {
         cardBackgroundColor.setFill()
         cardUIborder.stroke()
         cardUIborder.fill()
+        
+        if isFaceUp {
+            drawCardFace(rect)
+        } else {
+            drawCardBack(rect)
+        }
+        
+    }//draw rect
 
+    //    *******************************
+    //    MARK: class functions
+    //    *******************************
+    private func drawCardFace (_ rect:CGRect){
         // Draw card face
         var shapeFunction: (CGRect) -> UIBezierPath
         let cages = Grid.init(layout:.dimensions(rowCount: 3, columnCount: 1) , frame: self.bounds)
-
+        
         //determine shape
         shapeFunction = {
             switch self.cardShape {
@@ -92,7 +105,7 @@ class CardView: UIView {
                 return self.createOval($0)
             }
         }//shape function closure
-
+        
         //determine color
         var currentPrimaryColor:UIColor
         var currentSecondaryColor:UIColor
@@ -103,7 +116,7 @@ class CardView: UIView {
             currentPrimaryColor = UIColor.red
         case .green:
             currentPrimaryColor = UIColor.green
-         }
+        }
         currentPrimaryColor.setStroke()
         
         //determine fill
@@ -117,7 +130,7 @@ class CardView: UIView {
             currentSecondaryColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
             currentSecondaryColor.setFill()
         }
-
+        
         //consider the number of symbols per card
         var shapes = [UIBezierPath]()
         switch self.cardNumber {
@@ -136,13 +149,15 @@ class CardView: UIView {
             $0.stroke()
             $0.fill()
         }
-        
-        
-    }//draw rect
-
-    //    *******************************
-    //    MARK: class functions
-    //    *******************************
+    }
+    
+    private func drawCardBack (_ rect:CGRect){
+        let cardBackView = UIImageView.init(image: UIImage(named: "cardback"))
+        cardBackView.frame = rect
+        cardBackView.contentMode = .scaleToFill
+        self.addSubview(cardBackView)
+    }
+    
     private func createDiamond(_ rect: CGRect) -> UIBezierPath{
         let diamond = UIBezierPath()
         let axis = (min(rect.width, rect.height) * 0.9)/2

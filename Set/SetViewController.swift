@@ -28,7 +28,8 @@ class SetViewController: UIViewController, cardViewDataSource {
     private lazy var cheatSet = [SetCard]()
     private let tapSound = SystemSoundID(1105)
     private let newGameSound = SystemSoundID(1108)
-    private let matchSound = SystemSoundID(1024)
+    private let matchSound = SystemSoundID(1025)
+    private let misMatchSound = SystemSoundID(1024)
 
     // **************************************
     // MARK: outlets and functions
@@ -71,8 +72,8 @@ class SetViewController: UIViewController, cardViewDataSource {
         print ("card touched")
         let card = sender.view! as! CardView
         AudioServicesPlaySystemSound(tapSound)
-        if selectedCards.contains(where: {$0.value == sender }){
-            selectedCards.remove(at: selectedCards.firstIndex(where: {$0.value == sender })!)
+        if selectedCards.contains(where: {$0.value == card }){
+            selectedCards.remove(at: selectedCards.firstIndex(where: {$0.value == card })!)
             card.selected = false
             game.score += Constants.deselectPoints
             updateScore()
@@ -98,6 +99,7 @@ class SetViewController: UIViewController, cardViewDataSource {
                     _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: {_ in self.processMatch(matchSet: matchSet)})
                 } else {
                     print("cards did not match!")
+                    AudioServicesPlaySystemSound(misMatchSound)
                     _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: {_ in self.processMismatch(matchSet: matchSet)})
                 }
                 

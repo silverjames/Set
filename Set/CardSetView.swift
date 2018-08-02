@@ -67,6 +67,21 @@ class CardSetView: UIView {
             cardUI.isHidden = false
             self.addSubview(cardUI)
             gameCards.append(cardUI)
+            _ = Timer.scheduledTimer(withTimeInterval: 1.2, repeats: false, block: {_ in self.turnupCards()})
+        }
+    }
+
+
+private func turnupCards() {
+    for card in gameCards {
+        UIView.transition(with: card, duration: 0.6, options: [.transitionFlipFromLeft],
+            animations: {
+                for subview in card.subviews{
+                    subview.removeFromSuperview()
+                }
+                }, completion: {finished in
+                    card.isFaceUp = true
+            })
         }
     }
 }
