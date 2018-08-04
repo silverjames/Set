@@ -20,7 +20,7 @@ class SetCardGame: CustomStringConvertible {
             var deck=""
             let idList = setGame.map({$0.id})
             let sortedIdList = idList.sorted {$1 > $0}
-            deck += ("This deck has ID's \(String(describing: sortedIdList.first)) through \(String(describing: sortedIdList.last))\n")
+            deck += ("This deck has ID's \(String(describing: sortedIdList.first!)) through \(String(describing: sortedIdList.last!))\n")
 //            for card in setGame{
 //                deck += "\(card) \n"
 //                }

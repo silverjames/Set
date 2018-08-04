@@ -26,6 +26,7 @@ class SetCard: Equatable, CustomStringConvertible {
     // MARK: API
     // **************************************
     var id:Int
+    var isFaceUp:Bool
 
     var description: String{
         get {
@@ -47,6 +48,7 @@ class SetCard: Equatable, CustomStringConvertible {
     
     init(){
         id = SetCard.uniqueIdentifier
+        isFaceUp = false
         SetCard.uniqueIdentifierFactory()
     }
 

@@ -15,15 +15,11 @@ class SetViewController: UIViewController, cardViewDataSource {
     // MARK: private properties
     // **************************************
     private lazy var game:SetCardGame = SetCardGame()
-    private var cardFaces = [NSAttributedString]()
     private var selectedCards = [Int:CardView]()
     private var matchPoints:Int {
         get {
             return (GameConstants.maxCardsOnTable)/game.dealtCards.count + 1
         }
-    }
-    private var validSymbols:[String] {
-        return ["▲", "■", "●"]
     }
     private lazy var cheatSet = [SetCard]()
     private let tapSound = SystemSoundID(1105)
@@ -35,7 +31,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     // MARK: outlets and functions
     // **************************************
 
-    @IBOutlet weak var dealButton: UIButton!
+//    @IBOutlet weak var dealButton: UIButton!
     @IBOutlet weak var cardView: CardSetView!{
         didSet {
             cardView.delegate = self
@@ -160,7 +156,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     // **************************************
     private func newGame(){
         game.newGame()
-        dealButton.isEnabled = true
+//        dealButton.isEnabled = true
         cheatButton.isEnabled = checkForCheat()
         updateScore()
         print ("\(game.description)")
@@ -171,9 +167,9 @@ class SetViewController: UIViewController, cardViewDataSource {
     private func deal(){
         game.deal()
         if game.dealtCards.count == GameConstants.maxCardsOnTable{
-            dealButton.isEnabled = false
+//            dealButton.isEnabled = false
         } else{
-            dealButton.isEnabled = true
+//            dealButton.isEnabled = true
         }
         cheatButton.isEnabled = checkForCheat()
         cardView.setNeedsLayout()

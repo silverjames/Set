@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14306.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.3.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14278.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,76 +18,85 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PmO-HR-6yg">
-                                <rect key="frame" x="312" y="591" width="47" height="34"/>
-                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
-                                <state key="normal" title="Deal"/>
-                                <connections>
-                                    <action selector="deal:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NVQ-Q8-3MI"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DD9-rS-olj">
-                                <rect key="frame" x="187.5" y="583" width="0.0" height="0.0"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6lw-p4-j0t">
+                                <rect key="frame" x="16" y="553" width="35" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="EBd-KS-plK"/>
+                                    <constraint firstAttribute="width" constant="35" id="dSc-Gp-jX1"/>
+                                </constraints>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5y-nB-NKm">
-                                <rect key="frame" x="115" y="635" width="132" height="21"/>
+                                <rect key="frame" x="121" y="598" width="133" height="11"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Label........">
                                         <attributes>
-                                            <color key="NSColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" size="9" name=".AppleSystemUIFont"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qse-3G-Nio" userLabel="CheatButton">
-                                <rect key="frame" x="156" y="591" width="63" height="36"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
-                                <state key="normal" title="Cheat"/>
-                                <connections>
-                                    <action selector="cheatNow:" destination="BYZ-38-t0r" eventType="touchUpInside" id="D0H-q1-wqQ"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="redraw" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mWa-n9-viu">
-                                <rect key="frame" x="16" y="591" width="91" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
-                                <state key="normal" title="New Game"/>
-                                <connections>
-                                    <action selector="newGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YVO-Nw-j51"/>
-                                </connections>
-                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Wf1-EC-rPi">
+                                <rect key="frame" x="324" y="553" width="35" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="4z8-fV-Y7s"/>
+                                    <constraint firstAttribute="width" secondItem="Wf1-EC-rPi" secondAttribute="height" multiplier="5:8" id="Uay-do-mya"/>
+                                    <constraint firstAttribute="width" constant="35" id="xJD-d0-Fv8"/>
+                                </constraints>
+                            </imageView>
                             <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="giy-3W-0NG" customClass="CardSetView" customModule="Set" customModuleProvider="target">
-                                <rect key="frame" x="16" y="36" width="343" height="539"/>
+                                <rect key="frame" x="16" y="36" width="343" height="509"/>
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="76" translatesAutoresizingMaskIntoConstraints="NO" id="EFa-Jd-Ne3">
+                                <rect key="frame" x="16.5" y="617" width="342.5" height="34"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="redraw" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mWa-n9-viu">
+                                        <rect key="frame" x="0.0" y="0.0" width="91" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                        <state key="normal" title="New Game"/>
+                                        <connections>
+                                            <action selector="newGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YVO-Nw-j51"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="score" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DD9-rS-olj">
+                                        <rect key="frame" x="167" y="7" width="42.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qse-3G-Nio" userLabel="CheatButton">
+                                        <rect key="frame" x="285.5" y="0.0" width="57" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                        <state key="normal" title="Cheat"/>
+                                        <connections>
+                                            <action selector="cheatNow:" destination="BYZ-38-t0r" eventType="touchUpInside" id="D0H-q1-wqQ"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="DD9-rS-olj" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="3jr-hN-3cl"/>
-                            <constraint firstItem="DD9-rS-olj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="6LV-iK-gpc"/>
-                            <constraint firstItem="mWa-n9-viu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="6aT-Ce-Gq4"/>
-                            <constraint firstItem="PmO-HR-6yg" firstAttribute="top" secondItem="DD9-rS-olj" secondAttribute="bottom" constant="8" symbolic="YES" id="6xw-o9-1wB"/>
+                            <constraint firstItem="6lw-p4-j0t" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="896-Wk-3hW"/>
                             <constraint firstItem="giy-3W-0NG" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="8XU-ny-60m"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PmO-HR-6yg" secondAttribute="trailing" constant="16" id="Fhv-rb-rNq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="EFa-Jd-Ne3" secondAttribute="bottom" constant="16" id="HTX-Jw-YEr"/>
+                            <constraint firstItem="giy-3W-0NG" firstAttribute="trailing" secondItem="Wf1-EC-rPi" secondAttribute="trailing" id="J8P-ow-94O"/>
                             <constraint firstItem="giy-3W-0NG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="KDb-Zy-9rP"/>
-                            <constraint firstItem="B5y-nB-NKm" firstAttribute="top" secondItem="Qse-3G-Nio" secondAttribute="bottom" constant="8" symbolic="YES" id="M91-3q-Y0G"/>
-                            <constraint firstItem="giy-3W-0NG" firstAttribute="leading" secondItem="mWa-n9-viu" secondAttribute="leading" id="NCJ-Fw-bOW"/>
-                            <constraint firstItem="PmO-HR-6yg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Qse-3G-Nio" secondAttribute="trailing" constant="16" id="Pae-pi-62I"/>
-                            <constraint firstItem="Qse-3G-Nio" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mWa-n9-viu" secondAttribute="trailing" constant="16" id="UgC-xP-I3p"/>
-                            <constraint firstItem="B5y-nB-NKm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="115" id="Y43-rx-koF"/>
-                            <constraint firstItem="DD9-rS-olj" firstAttribute="top" secondItem="giy-3W-0NG" secondAttribute="bottom" constant="8" symbolic="YES" id="dOr-TD-nla"/>
-                            <constraint firstItem="Qse-3G-Nio" firstAttribute="top" secondItem="DD9-rS-olj" secondAttribute="bottom" constant="8" symbolic="YES" id="iyk-a2-Wdp"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="B5y-nB-NKm" secondAttribute="bottom" constant="11" id="jQF-sR-Vss"/>
-                            <constraint firstItem="mWa-n9-viu" firstAttribute="top" secondItem="DD9-rS-olj" secondAttribute="bottom" constant="8" symbolic="YES" id="lMF-q2-tR8"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="B5y-nB-NKm" secondAttribute="trailing" constant="128" id="nMa-PU-cAS"/>
-                            <constraint firstItem="Qse-3G-Nio" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="uWI-ta-zYd"/>
+                            <constraint firstItem="Wf1-EC-rPi" firstAttribute="top" secondItem="giy-3W-0NG" secondAttribute="bottom" constant="8" symbolic="YES" id="MGX-pI-yyB"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Wf1-EC-rPi" secondAttribute="trailing" constant="16" id="MN8-as-4Mv"/>
+                            <constraint firstItem="B5y-nB-NKm" firstAttribute="centerX" secondItem="giy-3W-0NG" secondAttribute="centerX" id="OxC-PG-g4c"/>
+                            <constraint firstItem="EFa-Jd-Ne3" firstAttribute="top" secondItem="B5y-nB-NKm" secondAttribute="bottom" constant="8" symbolic="YES" id="P2T-l4-jzj"/>
+                            <constraint firstItem="EFa-Jd-Ne3" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="SBE-bn-J8r"/>
+                            <constraint firstItem="Wf1-EC-rPi" firstAttribute="bottom" secondItem="6lw-p4-j0t" secondAttribute="bottom" id="YWo-nL-shW"/>
+                            <constraint firstItem="B5y-nB-NKm" firstAttribute="leading" secondItem="6lw-p4-j0t" secondAttribute="trailing" constant="70" id="Z7U-cT-PSg"/>
+                            <constraint firstItem="EFa-Jd-Ne3" firstAttribute="top" secondItem="Wf1-EC-rPi" secondAttribute="bottom" constant="8" symbolic="YES" id="c8o-TG-h2K"/>
+                            <constraint firstItem="Wf1-EC-rPi" firstAttribute="top" secondItem="6lw-p4-j0t" secondAttribute="top" id="caa-5Z-ZbG"/>
+                            <constraint firstItem="6lw-p4-j0t" firstAttribute="top" secondItem="giy-3W-0NG" secondAttribute="bottom" constant="8" symbolic="YES" id="nb2-c2-cUc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -95,7 +104,6 @@
                     <connections>
                         <outlet property="cardView" destination="giy-3W-0NG" id="eMy-Db-V9K"/>
                         <outlet property="cheatButton" destination="Qse-3G-Nio" id="Wht-TX-RjA"/>
-                        <outlet property="dealButton" destination="PmO-HR-6yg" id="x9A-TW-mKm"/>
                         <outlet property="score" destination="DD9-rS-olj" id="0iT-Zc-vFs"/>
                         <outlet property="test" destination="B5y-nB-NKm" id="xJY-Bd-8Ta"/>
                     </connections>

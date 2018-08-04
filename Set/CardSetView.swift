@@ -65,6 +65,7 @@ class CardSetView: UIView {
             let tap = UITapGestureRecognizer(target: delegate!, action: #selector(SetViewController.touchCard(_:)))
             cardUI.addGestureRecognizer(tap)
             cardUI.isHidden = false
+            cardUI.isFaceUp = delegate!.getDealtCards()[idx].isFaceUp
             self.addSubview(cardUI)
             gameCards.append(cardUI)
             _ = Timer.scheduledTimer(withTimeInterval: 1.2, repeats: false, block: {_ in self.turnupCards()})
@@ -73,18 +74,21 @@ class CardSetView: UIView {
 
 
 private func turnupCards() {
-    for card in gameCards {
-        UIView.transition(with: card, duration: 0.6, options: [.transitionFlipFromLeft],
-            animations: {
-                for subview in card.subviews{
-                    subview.removeFromSuperview()
-                }
-                }, completion: {finished in
-                    card.isFaceUp = true
-            })
-        }
+    for idx in 0 ..< delegate!.getDealtCards().count {
+        if !delegate!.getDealtCards()[idx].isFaceUp{
+            UIView.transition(with: gameCards[idx], duration: 0.6, options: [.transitionFlipFromLeft],
+                animations: {
+                    for subview in self.gameCards[idx].subviews{
+                        subview.removeFromSuperview()
+                    }
+                    }, completion: {finished in
+                        self.delegate!.getDealtCards()[idx].isFaceUp = true
+                        self.gameCards[idx].isFaceUp = true
+                })
+            }//check id facedown
+        }//for loop
     }
-}
+}//end class
 
 extension CardSetView{
     private struct SetViewRatios {
