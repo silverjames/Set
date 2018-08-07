@@ -22,10 +22,12 @@ class SetViewController: UIViewController, cardViewDataSource {
         }
     }
     private lazy var cheatSet = [SetCard]()
+    private lazy var cardPiles = [UIImageView]()
     private let tapSound = SystemSoundID(1105)
     private let newGameSound = SystemSoundID(1108)
-    private let matchSound = SystemSoundID(1025)
+    private let matchSound = SystemSoundID(1332)
     private let misMatchSound = SystemSoundID(1024)
+//    private var animator:UIViewPropertyAnimator!
 
     // **************************************
     // MARK: outlets and functions
@@ -46,11 +48,13 @@ class SetViewController: UIViewController, cardViewDataSource {
         newGame()
     }
     
-    @IBAction func deal(_ sender: UIButton) {
-        AudioServicesPlaySystemSound(tapSound)
-        deal()
+    @IBOutlet weak var deal: UIImageView!{
+        didSet {
+            let dealGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cardPileTapped(_:)))
+            deal.addGestureRecognizer(dealGestureRecognizer)
+        }
     }
-
+    
     @IBAction func cheatNow(_ sender: Any) {
         selectedCards.removeAll(keepingCapacity: true)
 
@@ -65,7 +69,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     }
     
     @objc func touchCard(_ sender: UITapGestureRecognizer) {
-        print ("card touched")
+
         let card = sender.view! as! CardView
         AudioServicesPlaySystemSound(tapSound)
         if selectedCards.contains(where: {$0.value == card }){
@@ -114,7 +118,22 @@ class SetViewController: UIViewController, cardViewDataSource {
     func getDealtCards() -> [SetCard] {
         return game.dealtCards
     }
+    func getFrameOfPlayingCardPile() -> CGRect {
+        if cardPiles.count == 2 {
+            return cardPiles[0].frame
+        } else{
+            return self.view.frame
+        }
+    }
     
+    func getFrameOfDiscardPile() -> CGRect {
+        if cardPiles.count == 2 {
+            return cardPiles[1].frame
+        } else{
+            return self.view.frame
+        }
+    }
+
     // **************************************
     // MARK: view lifecycle functions
     // **************************************
@@ -124,6 +143,8 @@ class SetViewController: UIViewController, cardViewDataSource {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        cardPiles.removeAll()
+        
         for subView in view.subviews{
             if subView is UIButton {
                 let button = subView as! UIButton
@@ -142,7 +163,16 @@ class SetViewController: UIViewController, cardViewDataSource {
                 subView.layer.borderColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
                 subView.backgroundColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
             }
+            
+            if subView is UIImageView{
+                subView.layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                subView.layer.borderWidth = 1.0
+                subView.layer.cornerRadius = 5
+                subView.isUserInteractionEnabled = true
+                cardPiles.append(subView as! UIImageView)
+            }
         }
+        self.cardPiles[0].image = UIImage(named: "cardback")
         printMessageForBernie()
         newGame()
     }
@@ -156,7 +186,6 @@ class SetViewController: UIViewController, cardViewDataSource {
     // **************************************
     private func newGame(){
         game.newGame()
-//        dealButton.isEnabled = true
         cheatButton.isEnabled = checkForCheat()
         updateScore()
         print ("\(game.description)")
@@ -164,18 +193,23 @@ class SetViewController: UIViewController, cardViewDataSource {
         cardView.setNeedsDisplay()
     }
 
-    private func deal(){
+    @objc private func cardPileTapped(_ gestureRecognizer: UITapGestureRecognizer){
+        guard gestureRecognizer.view != nil else {return}
+        dealCards()
+    }
+    private func dealCards(){
+        AudioServicesPlaySystemSound(tapSound)
         game.deal()
         if game.dealtCards.count == GameConstants.maxCardsOnTable{
-//            dealButton.isEnabled = false
-        } else{
-//            dealButton.isEnabled = true
+            cardPiles[0].isUserInteractionEnabled = false
+            cardPiles[0].image = nil
         }
+        
         cheatButton.isEnabled = checkForCheat()
         cardView.setNeedsLayout()
         cardView.setNeedsDisplay()
     }
-    
+
     private func checkForCheat () -> Bool{
         var cheatFound = false
         cheatSet.removeAll(keepingCapacity: true)
@@ -209,11 +243,34 @@ class SetViewController: UIViewController, cardViewDataSource {
             game.dealtCards.remove(at: game.dealtCards.lastIndex(of: card.first!)!)
             game.matchedCards.append(card.first!)
             matches.value.selected = false
-        }
+        }//loop through dictionary
+
+        let cardUIs = Array(selectedCards.values)
+
+        cardView.animator = UIViewPropertyAnimator.init(duration: 2.5, curve: .easeInOut, animations: {
+            [unowned self, cardUIs] in
+            cardUIs.forEach{
+                let dx = (self.getFrameOfDiscardPile().origin.x) - $0.frame.origin.x
+                let dy = (self.getFrameOfDiscardPile().origin.y) - $0.frame.origin.y
+                $0.transform = CGAffineTransform.identity.translatedBy(x: dx-25, y: dy-10).rotated(by: CGFloat.pi).scaledBy(x: 0.35, y: 0.35)
+                $0.alpha = 0.0
+            }
+        })
+        
+        cardView.animator.addCompletion({finished in
+            UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.8, delay: 0, options: .curveEaseInOut, animations:{
+                self.cardPiles[1].image = UIImage(named: "cardback")
+                self.cardPiles[1].alpha = 0.7
+                self.cardView.setNeedsLayout()
+            })
+        })
+        
+        cardView.animator.startAnimation()
+        
         game.score += matchPoints
         updateScore()
         selectedCards.removeAll()
-        deal()
+        dealCards()
     }
     
     private func processMismatch(matchSet:[SetCard]){

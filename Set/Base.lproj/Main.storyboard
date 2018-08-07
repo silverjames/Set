@@ -26,7 +26,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5y-nB-NKm">
-                                <rect key="frame" x="121" y="598" width="133" height="11"/>
+                                <rect key="frame" x="164" y="575.5" width="47" height="11"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Label........">
                                         <attributes>
@@ -47,7 +47,7 @@
                                 </constraints>
                             </imageView>
                             <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="giy-3W-0NG" customClass="CardSetView" customModule="Set" customModuleProvider="target">
-                                <rect key="frame" x="16" y="36" width="343" height="509"/>
+                                <rect key="frame" x="8" y="8" width="359" height="537"/>
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="76" translatesAutoresizingMaskIntoConstraints="NO" id="EFa-Jd-Ne3">
@@ -82,18 +82,20 @@
                         </subviews>
                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="giy-3W-0NG" secondAttribute="trailing" constant="8" id="7Cm-M1-jvw"/>
                             <constraint firstItem="6lw-p4-j0t" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="896-Wk-3hW"/>
                             <constraint firstItem="giy-3W-0NG" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="8XU-ny-60m"/>
+                            <constraint firstItem="B5y-nB-NKm" firstAttribute="centerY" secondItem="6lw-p4-j0t" secondAttribute="centerY" id="E4q-8O-jaM"/>
+                            <constraint firstItem="giy-3W-0NG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="G5b-He-rqM"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="EFa-Jd-Ne3" secondAttribute="bottom" constant="16" id="HTX-Jw-YEr"/>
-                            <constraint firstItem="giy-3W-0NG" firstAttribute="trailing" secondItem="Wf1-EC-rPi" secondAttribute="trailing" id="J8P-ow-94O"/>
-                            <constraint firstItem="giy-3W-0NG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="KDb-Zy-9rP"/>
+                            <constraint firstItem="giy-3W-0NG" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="8" id="KDb-Zy-9rP"/>
                             <constraint firstItem="Wf1-EC-rPi" firstAttribute="top" secondItem="giy-3W-0NG" secondAttribute="bottom" constant="8" symbolic="YES" id="MGX-pI-yyB"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Wf1-EC-rPi" secondAttribute="trailing" constant="16" id="MN8-as-4Mv"/>
                             <constraint firstItem="B5y-nB-NKm" firstAttribute="centerX" secondItem="giy-3W-0NG" secondAttribute="centerX" id="OxC-PG-g4c"/>
-                            <constraint firstItem="EFa-Jd-Ne3" firstAttribute="top" secondItem="B5y-nB-NKm" secondAttribute="bottom" constant="8" symbolic="YES" id="P2T-l4-jzj"/>
+                            <constraint firstItem="EFa-Jd-Ne3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="B5y-nB-NKm" secondAttribute="bottom" constant="8" symbolic="YES" id="P2T-l4-jzj"/>
+                            <constraint firstItem="Wf1-EC-rPi" firstAttribute="centerY" secondItem="6lw-p4-j0t" secondAttribute="centerY" id="RXM-go-StN"/>
                             <constraint firstItem="EFa-Jd-Ne3" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="SBE-bn-J8r"/>
                             <constraint firstItem="Wf1-EC-rPi" firstAttribute="bottom" secondItem="6lw-p4-j0t" secondAttribute="bottom" id="YWo-nL-shW"/>
-                            <constraint firstItem="B5y-nB-NKm" firstAttribute="leading" secondItem="6lw-p4-j0t" secondAttribute="trailing" constant="70" id="Z7U-cT-PSg"/>
                             <constraint firstItem="EFa-Jd-Ne3" firstAttribute="top" secondItem="Wf1-EC-rPi" secondAttribute="bottom" constant="8" symbolic="YES" id="c8o-TG-h2K"/>
                             <constraint firstItem="Wf1-EC-rPi" firstAttribute="top" secondItem="6lw-p4-j0t" secondAttribute="top" id="caa-5Z-ZbG"/>
                             <constraint firstItem="6lw-p4-j0t" firstAttribute="top" secondItem="giy-3W-0NG" secondAttribute="bottom" constant="8" symbolic="YES" id="nb2-c2-cUc"/>
@@ -104,6 +106,7 @@
                     <connections>
                         <outlet property="cardView" destination="giy-3W-0NG" id="eMy-Db-V9K"/>
                         <outlet property="cheatButton" destination="Qse-3G-Nio" id="Wht-TX-RjA"/>
+                        <outlet property="deal" destination="6lw-p4-j0t" id="YNX-YN-CIV"/>
                         <outlet property="score" destination="DD9-rS-olj" id="0iT-Zc-vFs"/>
                         <outlet property="test" destination="B5y-nB-NKm" id="xJY-Bd-8Ta"/>
                     </connections>

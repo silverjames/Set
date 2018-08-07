@@ -10,6 +10,8 @@ import UIKit
 protocol cardViewDataSource: class {
     func getGridDimensions() -> (cellCount: Int, aspectRatio: CGFloat)
     func getDealtCards() -> [SetCard]
+    func getFrameOfPlayingCardPile() -> CGRect
+    func getFrameOfDiscardPile() -> CGRect
 }
 
 class CardSetView: UIView {
