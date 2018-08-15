@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.3.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.13.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.9"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -26,7 +27,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5y-nB-NKm">
-                                <rect key="frame" x="164" y="575.5" width="47" height="11"/>
+                                <rect key="frame" x="164" y="598" width="47" height="11"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Label........">
                                         <attributes>
@@ -50,8 +51,8 @@
                                 <rect key="frame" x="8" y="8" width="359" height="537"/>
                                 <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="76" translatesAutoresizingMaskIntoConstraints="NO" id="EFa-Jd-Ne3">
-                                <rect key="frame" x="16.5" y="617" width="342.5" height="34"/>
+                            <stackView opaque="NO" contentMode="redraw" distribution="fillEqually" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="EFa-Jd-Ne3">
+                                <rect key="frame" x="43" y="617" width="289" height="34"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="redraw" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mWa-n9-viu">
                                         <rect key="frame" x="0.0" y="0.0" width="91" height="34"/>
@@ -63,13 +64,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="score" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DD9-rS-olj">
-                                        <rect key="frame" x="167" y="7" width="42.5" height="20.5"/>
+                                        <rect key="frame" x="99" y="7" width="91" height="20.5"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qse-3G-Nio" userLabel="CheatButton">
-                                        <rect key="frame" x="285.5" y="0.0" width="57" height="34"/>
+                                        <rect key="frame" x="198" y="0.0" width="91" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                                         <state key="normal" title="Cheat"/>
@@ -78,6 +79,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
+                                <variation key="heightClass=regular-widthClass=regular" spacingType="standard"/>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -85,14 +87,13 @@
                             <constraint firstAttribute="trailing" secondItem="giy-3W-0NG" secondAttribute="trailing" constant="8" id="7Cm-M1-jvw"/>
                             <constraint firstItem="6lw-p4-j0t" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="896-Wk-3hW"/>
                             <constraint firstItem="giy-3W-0NG" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="8XU-ny-60m"/>
-                            <constraint firstItem="B5y-nB-NKm" firstAttribute="centerY" secondItem="6lw-p4-j0t" secondAttribute="centerY" id="E4q-8O-jaM"/>
                             <constraint firstItem="giy-3W-0NG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="G5b-He-rqM"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="EFa-Jd-Ne3" secondAttribute="bottom" constant="16" id="HTX-Jw-YEr"/>
                             <constraint firstItem="giy-3W-0NG" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="8" id="KDb-Zy-9rP"/>
                             <constraint firstItem="Wf1-EC-rPi" firstAttribute="top" secondItem="giy-3W-0NG" secondAttribute="bottom" constant="8" symbolic="YES" id="MGX-pI-yyB"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Wf1-EC-rPi" secondAttribute="trailing" constant="16" id="MN8-as-4Mv"/>
                             <constraint firstItem="B5y-nB-NKm" firstAttribute="centerX" secondItem="giy-3W-0NG" secondAttribute="centerX" id="OxC-PG-g4c"/>
-                            <constraint firstItem="EFa-Jd-Ne3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="B5y-nB-NKm" secondAttribute="bottom" constant="8" symbolic="YES" id="P2T-l4-jzj"/>
+                            <constraint firstItem="EFa-Jd-Ne3" firstAttribute="top" secondItem="B5y-nB-NKm" secondAttribute="bottom" constant="8" symbolic="YES" id="P2T-l4-jzj"/>
                             <constraint firstItem="Wf1-EC-rPi" firstAttribute="centerY" secondItem="6lw-p4-j0t" secondAttribute="centerY" id="RXM-go-StN"/>
                             <constraint firstItem="EFa-Jd-Ne3" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="SBE-bn-J8r"/>
                             <constraint firstItem="Wf1-EC-rPi" firstAttribute="bottom" secondItem="6lw-p4-j0t" secondAttribute="bottom" id="YWo-nL-shW"/>

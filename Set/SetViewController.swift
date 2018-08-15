@@ -59,9 +59,9 @@ class SetViewController: UIViewController, cardViewDataSource {
         selectedCards.removeAll(keepingCapacity: true)
 
         for card in cheatSet {
-            addselectedCardToMatchingSet(cardView.gameCards[game.dealtCards.firstIndex(of: card)!])
+            addselectedCardToMatchingSet(cardView.setCardViews[game.dealtCards.firstIndex(of: card)!])
         }
-        _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: {_ in self.processMatch(matchSet: self.cheatSet)})
+        _ = Timer.scheduledTimer(withTimeInterval: 1.8, repeats: false, block: {_ in self.processMatch(matchSet: self.cheatSet)})
         
         let penalty = -2 * matchPoints
         game.score += penalty
@@ -96,11 +96,11 @@ class SetViewController: UIViewController, cardViewDataSource {
                 if game.match(keysToMatch: matchSet){
                     print("cards matched!")
                     AudioServicesPlaySystemSound(matchSound)
-                    _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: {_ in self.processMatch(matchSet: matchSet)})
+                    _ = Timer.scheduledTimer(withTimeInterval: 1.8, repeats: false, block: {_ in self.processMatch(matchSet: matchSet)})
                 } else {
                     print("cards did not match!")
                     AudioServicesPlaySystemSound(misMatchSound)
-                    _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: {_ in self.processMismatch(matchSet: matchSet)})
+                    _ = Timer.scheduledTimer(withTimeInterval: 1.8, repeats: false, block: {_ in self.processMismatch(matchSet: matchSet)})
                 }
                 
             default:
@@ -146,23 +146,25 @@ class SetViewController: UIViewController, cardViewDataSource {
         cardPiles.removeAll()
         
         for subView in view.subviews{
-            if subView is UIButton {
-                let button = subView as! UIButton
-                button.layer.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-                button.layer.cornerRadius = 5
-                button.layer.borderWidth = 0.2
-                button.mask?.clipsToBounds = true
-                button.layer.borderColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
-                button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16.0)
-                
-            }
-            if subView is UILabel{
-                subView.layer.cornerRadius = 5
-                subView.layer.borderWidth = 0.2
-                subView.mask?.clipsToBounds = true
-                subView.layer.borderColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
-                subView.backgroundColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
-            }
+            if subView is UIStackView {
+                for stackSubView in subView.subviews {
+                    if stackSubView is UIButton {
+                        let button = stackSubView as! UIButton
+                        button.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+                        button.layer.cornerRadius = 5
+                        button.layer.borderWidth = 1.0
+                        button.layer.borderColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16.0)
+                        
+                    }
+                    if stackSubView is UILabel{
+                        stackSubView.layer.cornerRadius = 5
+                        stackSubView.layer.borderWidth = 0.2
+                        stackSubView.layer.borderColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
+                        stackSubView.backgroundColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
+                    }
+                }//stack view subs
+            }//stack view
             
             if subView is UIImageView{
                 subView.layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -170,8 +172,8 @@ class SetViewController: UIViewController, cardViewDataSource {
                 subView.layer.cornerRadius = 5
                 subView.isUserInteractionEnabled = true
                 cardPiles.append(subView as! UIImageView)
-            }
-        }
+            }//image views
+        }//subviews
         self.cardPiles[0].image = UIImage(named: "cardback")
         printMessageForBernie()
         newGame()
@@ -189,6 +191,8 @@ class SetViewController: UIViewController, cardViewDataSource {
         cheatButton.isEnabled = checkForCheat()
         updateScore()
         print ("\(game.description)")
+        cardView.setCardViews.removeAll()
+        cardView.subviews.forEach{$0.removeFromSuperview()}
         cardView.setNeedsLayout()
         cardView.setNeedsDisplay()
     }
@@ -205,7 +209,7 @@ class SetViewController: UIViewController, cardViewDataSource {
             cardPiles[0].image = nil
         }
         
-        cheatButton.isEnabled = checkForCheat()
+        cheatButton.isHidden = !checkForCheat()
         cardView.setNeedsLayout()
         cardView.setNeedsDisplay()
     }
@@ -222,7 +226,6 @@ class SetViewController: UIViewController, cardViewDataSource {
                         cheatButton.isEnabled = true
                         cheatFound = true
                         cheatSet = checkSet
-//                        print ("\(cheatSet)")
                     }
                 }
             }
@@ -231,7 +234,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     }
     private func addselectedCardToMatchingSet(_ sender:CardView){
 //        print ("\(sender)")
-        let idx = game.dealtCards[cardView.gameCards.firstIndex(of: sender)!].id
+        let idx = game.dealtCards[cardView.setCardViews.firstIndex(of: sender)!].id
         print("added card \(String(describing: idx))")
         selectedCards[idx] = sender
         sender.selected = true
@@ -262,6 +265,12 @@ class SetViewController: UIViewController, cardViewDataSource {
                 self.cardPiles[1].image = UIImage(named: "cardback")
                 self.cardPiles[1].alpha = 0.7
                 self.cardView.setNeedsLayout()
+                cardUIs.forEach {
+                    $0.removeFromSuperview()
+                    if let _ = self.cardView.setCardViews.firstIndex(of: $0){
+                        self.cardView.setCardViews.remove(at: self.cardView.setCardViews.firstIndex(of: $0)!)
+                    }//if let
+                }//for all card views
             })
         })
         
@@ -290,7 +299,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     private func printMessageForBernie(){
         //        MARK: test code for nsattributedstring
         var attributes = [NSAttributedString.Key: Any?]()
-        attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(10), .foregroundColor: UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.15), .strokeWidth: -3.0]
+        attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(10), .foregroundColor: UIColor(red: 1.0, green: 0.5, blue: 0.5, alpha: 0.25), .strokeWidth: -3.0]
         test.attributedText = (NSAttributedString(string:"Bernie was here...", attributes:attributes as [NSAttributedString.Key : Any]))
     }
 }

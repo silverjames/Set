@@ -31,6 +31,11 @@ class CardView: UIView {
     var cardColor:cColor
     var selected:Bool = false {didSet {setNeedsDisplay()}}
     var isFaceUp:Bool = false {didSet {setNeedsDisplay()}}
+    var dimension:CGRect {
+        get {
+            return self.frame
+        }
+    }
     private let setSymbolInset = UIEdgeInsets.init(top: CardRatios.insets, left: CardRatios.insets, bottom: CardRatios.insets, right: CardRatios.insets)
 
     //    *******************************
@@ -53,6 +58,7 @@ class CardView: UIView {
         self.layer.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 0)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.isHidden = false
+        self.contentMode = .redraw
     }
     
     required init?(coder aDecoder: NSCoder) {
