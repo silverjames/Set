@@ -152,9 +152,8 @@ class SetViewController: UIViewController, cardViewDataSource {
                         let button = stackSubView as! UIButton
                         button.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
                         button.layer.cornerRadius = 5
-                        button.layer.borderWidth = 1.0
-                        button.layer.borderColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
-                        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16.0)
+                        button.layer.borderWidth = 0.0
+                        button.titleLabel?.font = UIFont.systemFont(ofSize: 16.0)
                         
                     }
                     if stackSubView is UILabel{
@@ -188,7 +187,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     // **************************************
     private func newGame(){
         game.newGame()
-        cheatButton.isEnabled = checkForCheat()
+        cheatButton.isHidden = !checkForCheat()
         updateScore()
         print ("\(game.description)")
         cardView.setCardViews.removeAll()
