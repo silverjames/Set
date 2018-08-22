@@ -22,9 +22,10 @@ class CardSetView: UIView {
 
     weak var delegate:cardViewDataSource?
     var setCardViews = [CardView]()
-    var grid = Grid(layout: .dimensions(rowCount: 1, columnCount: 1))
+    private var grid = Grid(layout: .dimensions(rowCount: 1, columnCount: 1))
     var animator:UIViewPropertyAnimator!
-    let setCardInset = UIEdgeInsets.init(top: SetViewRatios.insets, left: SetViewRatios.insets, bottom: SetViewRatios.insets, right: SetViewRatios.insets)
+    private let setCardInset = UIEdgeInsets.init(top: SetViewRatios.insets, left: SetViewRatios.insets, bottom: SetViewRatios.insets, right: SetViewRatios.insets)
+    private var oldCardPositions = [Int:CardView]()// id:index in grid
 
     //    *****************
     //    MARK: lifecycle Functions
@@ -50,91 +51,62 @@ class CardSetView: UIView {
         print("csv: updateViewFromModel")
         self.grid = Grid(layout: .aspectRatio(delegate!.getGridDimensions().aspectRatio))
         grid.cellCount = (delegate!.getGridDimensions().cellCount)
-
-        for view in self.subviews{
-            view.removeFromSuperview()
-        }
-        setCardViews.removeAll()
         grid.frame = self.bounds
+
+        for idx in 0..<setCardViews.count {
+            oldCardPositions[delegate!.getDealtCards()[idx].id] = setCardViews[idx]
+        }
+
+        self.subviews.forEach {$0.removeFromSuperview()}
+        setCardViews.removeAll()
         
-        for gridIndex in 0..<grid.cellCount {
-//            if gridIndex == setCardViews.count {//add new view
-                print ("card: \(delegate!.getDealtCards()[gridIndex].id)")
-                let cardUI = CardView(frame: grid[gridIndex]!.inset(by: setCardInset),
-                                      cardNumber: delegate!.getDealtCards()[gridIndex].decoration[0],
-                                      cardShape: delegate!.getDealtCards()[gridIndex].decoration[1],
-                                      cardFill: delegate!.getDealtCards()[gridIndex].decoration[2],
-                                      cardColor: delegate!.getDealtCards()[gridIndex].decoration[3])
-                let tap = UITapGestureRecognizer(target: delegate!, action: #selector(SetViewController.touchCard(_:)))
-                cardUI.addGestureRecognizer(tap)
-                cardUI.isFaceUp = delegate!.getDealtCards()[gridIndex].isFaceUp
-                self.addSubview(cardUI)
-                setCardViews.append(cardUI)
-//            } else {
-////                print ("card: \(delegate!.getDealtCards()[gridIndex].id)")
-////                print("grid frame: \(grid[gridIndex]!) - center: \(getGridCellCenter(cell: grid[gridIndex]!))")
-//                let gridCenter = convert(getGridCellCenter(cell: grid[gridIndex]!), to: self)
-////                print("grid center translated: \(gridCenter)")
-////                print("card frame b'fore: \(setCardViews[gridIndex].dimension) - center: \(getGridCellCenter(cell: setCardViews[gridIndex].dimension))")
-//
-////                setCardViews[gridIndex].removeFromSuperview()
-//                setCardViews[gridIndex].transform = CGAffineTransform.identity.scaledBy(x: grid[gridIndex]!.inset(by: setCardInset).width / setCardViews[gridIndex].frame.width, y: grid[gridIndex]!.inset(by:setCardInset).height / setCardViews[gridIndex].frame.height)
-//
-//                let dx:CGFloat
-//                let dy:CGFloat
-//                
-//                if gridCenter.x <= getGridCellCenter(cell: setCardViews[gridIndex].dimension).x {
-//                    dx = gridCenter.x - getGridCellCenter(cell: setCardViews[gridIndex].dimension).x
-//                } else {
-//                    dx = getGridCellCenter(cell: setCardViews[gridIndex].dimension).x - gridCenter.x
-//                }
-//
-//                if gridCenter.y <= getGridCellCenter(cell: setCardViews[gridIndex].dimension).y {
-//                    dy = gridCenter.y - getGridCellCenter(cell: setCardViews[gridIndex].dimension).y
-//                } else {
-//                    dy = getGridCellCenter(cell: setCardViews[gridIndex].dimension).y - gridCenter.y
-//                }
-//
-////                setCardViews[gridIndex].transform = CGAffineTransform.identity.translatedBy(x: dx, y:  dy)
-//                setCardViews[gridIndex].frame = grid[gridIndex]!.inset(by: setCardInset)
-//                self.addSubview(setCardViews[gridIndex])
-//
-//                print("card frame after: \(setCardViews[gridIndex].dimension)- center: \(getGridCellCenter(cell: setCardViews[gridIndex].dimension))")
-//                print("****")
-//            }
+        for gridIndex in 0..<self.grid.cellCount {//create all cards
+            print ("card: \(self.delegate!.getDealtCards()[gridIndex].id)")
+
+            let cardUI = CardView(frame: self.grid[gridIndex]!.inset(by: self.setCardInset),
+                                  cardNumber: self.delegate!.getDealtCards()[gridIndex].decoration[0],
+                                  cardShape: self.delegate!.getDealtCards()[gridIndex].decoration[1],
+                                  cardFill: self.delegate!.getDealtCards()[gridIndex].decoration[2],
+                                  cardColor: self.delegate!.getDealtCards()[gridIndex].decoration[3])
+            let tap = UITapGestureRecognizer(target: self.delegate!, action: #selector(SetViewController.touchCard(_:)))
+            cardUI.addGestureRecognizer(tap)
+            cardUI.translatesAutoresizingMaskIntoConstraints = false
+            cardUI.isFaceUp = self.delegate!.getDealtCards()[gridIndex].isFaceUp
+            self.setCardViews.append(cardUI)
+
+            if let oldFrame = oldCardPositions[delegate!.getDealtCards()[gridIndex].id] {
+                cardUI.frame = oldFrame.frame
+            }
             
-            _ = Timer.scheduledTimer(withTimeInterval: 1.2, repeats: false, block: {_ in self.turnupCards()})
-
-        }// loop through grid
-//        self.layoutIfNeeded()
-        print ("I have \(self.subviews.count) subviews")
-//        for index in 0..<setCardViews.count {
-//            print ("grid frame: \(String(describing: grid[index]!)), cardViewFrame: \(setCardViews[index].frame)")
-//            let newOrigin = convert(grid[index]!.origin, to: self as UIView)
-//            let dx = grid[index]!.width / setCardViews[index].frame.width
-//            let dy = grid[index]!.height / setCardViews[index].frame.height
-//            setCardViews[index].transform = CGAffineTransform.identity.translatedBy(x: setCardViews[index].frame.origin.x - newOrigin.x, y: setCardViews[index].frame.origin.y - newOrigin.y).scaledBy(x: dx, y: dy)
-//        }
-        
-    }
-
-
-private func turnupCards() {
-    for idx in 0 ..< delegate!.getDealtCards().count {
-        if !delegate!.getDealtCards()[idx].isFaceUp{
-            UIView.transition(with: setCardViews[idx], duration: 0.6, options: [.transitionFlipFromLeft],
-                animations: {
-                    for subview in self.setCardViews[idx].subviews{
-                        subview.removeFromSuperview()
+            self.addSubview(cardUI)
+            
+            animator = UIViewPropertyAnimator.init(duration: 0.5, curve: .easeInOut, animations: {
+                [unowned self, unowned cardUI] in
+                cardUI.frame = self.grid[gridIndex]!.inset(by: self.setCardInset)
+            })
+            
+            if !cardUI.isFaceUp {
+                animator.addCompletion({animatingPosition in
+                    switch animatingPosition {
+                    case .end:
+                        UIView.transition(with: cardUI, duration: 0.6, options: [.transitionFlipFromLeft], animations: {
+                            cardUI.isFaceUp = true
+                        })
+                        self.layoutIfNeeded()
+                    default:
+                        break
                     }
-                    }, completion: {finished in
-                        self.delegate!.getDealtCards()[idx].isFaceUp = true
-                        self.setCardViews[idx].isFaceUp = true
                 })
-            }//check id facedown
-        }//for loop
-    }
-}//end class
+                delegate!.getDealtCards()[gridIndex].isFaceUp = true
+            }//end if
+            
+            animator.startAnimation()
+        }// loop through grid
+        
+    }//end func
+    
+
+    }//end class
 
 extension CardSetView{
     private struct SetViewRatios {
