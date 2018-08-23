@@ -48,7 +48,7 @@ class SetCard: Equatable, CustomStringConvertible {
     
     init(){
         id = SetCard.uniqueIdentifier
-        isFaceUp = false
+        isFaceUp = true
         SetCard.uniqueIdentifierFactory()
     }
 

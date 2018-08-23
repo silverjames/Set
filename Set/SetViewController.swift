@@ -156,19 +156,13 @@ class SetViewController: UIViewController, cardViewDataSource {
                         button.titleLabel?.font = UIFont.systemFont(ofSize: 16.0)
                         
                     }
-//                    if stackSubView is UILabel{
-//                        stackSubView.layer.cornerRadius = 5
-//                        stackSubView.layer.borderWidth = 0.2
-//                        stackSubView.layer.borderColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
-//                        stackSubView.backgroundColor = #colorLiteral(red: 0.1294117719, green: 0.2156862766, blue: 0.06666667014, alpha: 0)
-//                    }
                 }//stack view subs
             }//stack view
             
             if subView is UIImageView{
-                subView.layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-                subView.layer.borderWidth = 1.0
-                subView.layer.cornerRadius = 5
+//                subView.layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+//                subView.layer.borderWidth = 1.0
+//                subView.layer.cornerRadius = 5
                 subView.isUserInteractionEnabled = true
                 cardPiles.append(subView as! UIImageView)
             }//image views

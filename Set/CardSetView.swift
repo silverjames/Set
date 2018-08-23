@@ -89,10 +89,9 @@ class CardSetView: UIView {
                 animator.addCompletion({animatingPosition in
                     switch animatingPosition {
                     case .end:
-                        UIView.transition(with: cardUI, duration: 0.6, options: [.transitionFlipFromLeft], animations: {
+                        UIView.transition(with: cardUI, duration: 0.5, options: [.transitionFlipFromLeft], animations: {
                             cardUI.isFaceUp = true
                         })
-                        self.layoutIfNeeded()
                     default:
                         break
                     }
