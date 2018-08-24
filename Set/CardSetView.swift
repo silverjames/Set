@@ -26,6 +26,11 @@ class CardSetView: UIView {
     var animator:UIViewPropertyAnimator!
     private let setCardInset = UIEdgeInsets.init(top: SetViewRatios.insets, left: SetViewRatios.insets, bottom: SetViewRatios.insets, right: SetViewRatios.insets)
     private var oldCardPositions = [Int:CardView]()// id:index in grid
+    private var faceDownCards:[CardView] {
+        get {
+            return setCardViews.filter {!$0.isFaceUp}
+        }
+    }
 
     //    *****************
     //    MARK: lifecycle Functions
@@ -33,7 +38,7 @@ class CardSetView: UIView {
     override func layoutSubviews() {
         print("csv: layoutSubviews")
         super.layoutSubviews()
-        
+
         if let _ = animator {
             if !animator.isRunning {
                 updateViewFromModel()
@@ -42,6 +47,7 @@ class CardSetView: UIView {
             updateViewFromModel()
         }
     }
+    
 
     //    *****************
     //    MARK Functions
@@ -61,7 +67,7 @@ class CardSetView: UIView {
         setCardViews.removeAll()
         
         for gridIndex in 0..<self.grid.cellCount {//create all cards
-            print ("card: \(self.delegate!.getDealtCards()[gridIndex].id)")
+//            print ("card: \(self.delegate!.getDealtCards()[gridIndex].id)")
 
             let cardUI = CardView(frame: self.grid[gridIndex]!.inset(by: self.setCardInset),
                                   cardNumber: self.delegate!.getDealtCards()[gridIndex].decoration[0],
@@ -77,35 +83,41 @@ class CardSetView: UIView {
             if let oldFrame = oldCardPositions[delegate!.getDealtCards()[gridIndex].id] {
                 cardUI.frame = oldFrame.frame
             }
-            
-            self.addSubview(cardUI)
-            
+//            self.addSubview(cardUI)
+
             animator = UIViewPropertyAnimator.init(duration: 0.5, curve: .easeInOut, animations: {
-                [unowned self, unowned cardUI] in
-                cardUI.frame = self.grid[gridIndex]!.inset(by: self.setCardInset)
+                [unowned self] in
+                    self.setCardViews[gridIndex].frame = self.grid[gridIndex]!.inset(by: self.setCardInset)
             })
-            
-            if !cardUI.isFaceUp {
-                animator.addCompletion({animatingPosition in
-                    switch animatingPosition {
-                    case .end:
-                        UIView.transition(with: cardUI, duration: 0.5, options: [.transitionFlipFromLeft], animations: {
-                            cardUI.isFaceUp = true
-                        })
-                    default:
-                        break
-                    }
-                })
-                delegate!.getDealtCards()[gridIndex].isFaceUp = true
-            }//end if
-            
+
             animator.startAnimation()
+            self.addSubview(setCardViews[gridIndex])
+
         }// loop through grid
+
+        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in self.turnUpCards()})
         
     }//end func
     
+    private func turnUpCards() {
 
-    }//end class
+        animator = UIViewPropertyAnimator.init(duration: 0.5, curve: .easeInOut, animations: {
+            [unowned self] in
+            self.faceDownCards.forEach {cardView in
+                UIView.transition(with: cardView, duration: 0.5, options: .transitionFlipFromLeft, animations: {
+                        [cardView] in
+                        cardView.isFaceUp = true
+                    self.delegate!.getDealtCards()[idx].isFaceUp = true
+                    }, completion:nil)
+            }
+        })
+
+        animator.startAnimation()
+        
+
+    }
+    
+}//end class
 
 extension CardSetView{
     private struct SetViewRatios {

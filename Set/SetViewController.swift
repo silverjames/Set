@@ -176,6 +176,11 @@ class SetViewController: UIViewController, cardViewDataSource {
         super.viewWillAppear(animated)
         
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        cardView.setNeedsDisplay()
+    }
     // **************************************
     // MARK: private functions
     // **************************************
