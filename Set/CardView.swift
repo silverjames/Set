@@ -155,17 +155,21 @@ class CardView: UIView {
 
         shapes.forEach {
             $0.lineWidth = CardRatios.symbolLineWidth
-            $0.stroke()
             switch self.cardFill{
             case .solid, .unfilled:
                 $0.fill()
+                $0.stroke()
             case .striped:
+                let context = UIGraphicsGetCurrentContext()
+                context?.saveGState()
                 $0.addClip()
-                let stepperSize = $0.bounds.width/20
-                for x in stride(from: $0.bounds.minX, to: $0.bounds.maxX, by: stepperSize) {
-                    $0.move(to: CGPoint(x: x, y: 0))
+                let stepperSize = $0.bounds.width/CardRatios.stripeCount
+                for x in stride(from: $0.bounds.minX + stepperSize, to: $0.bounds.maxX, by: stepperSize) {
+                    $0.move(to: CGPoint(x: x, y: $0.bounds.minY))
                     $0.addLine(to: CGPoint(x: x, y: $0.bounds.maxY))
                 }
+                $0.stroke()
+                context?.restoreGState()
             }//switch
         }//for each shape
     }
@@ -248,12 +252,13 @@ class CardView: UIView {
     }
 
     private struct CardRatios {
-        static let symbolLineWidth: CGFloat = 2.0
+        static let symbolLineWidth: CGFloat = 1.8
         static let frameInsetRatio: CGFloat = 0.08
         static let cardCornerRadius:CGFloat = 8.0
         static let cardBorderLineWidth:CGFloat = 4.0
         static let diamondfactor:CGFloat = 0.7
         static let insets = CGFloat(4.0)
+        static let stripeCount = CGFloat(11)
        static let p1_dx = CGFloat(0.5092592592592593)
        static let p1_dy = CGFloat(0.15300546448087432)
        static let p2_dx = CGFloat(0.8734567901234568)

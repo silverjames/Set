@@ -21,8 +21,14 @@ class SetViewController: UIViewController, cardViewDataSource {
             return (GameConstants.maxCardsOnTable)/game.dealtCards.count + 1
         }
     }
+    private var allCardsDealt:Bool {
+        get {
+            return game.dealtCards.count == GameConstants.maxCardsOnTable
+        }
+    }
     private lazy var cheatSet = [SetCard]()
     private lazy var cardPiles = [UIImageView]()
+    private var animator:UIViewPropertyAnimator!
     private let tapSound = SystemSoundID(1105)
     private let newGameSound = SystemSoundID(1108)
     private let matchSound = SystemSoundID(1332)
@@ -191,7 +197,6 @@ class SetViewController: UIViewController, cardViewDataSource {
         cardView.setCardViews.removeAll()
         cardView.subviews.forEach{$0.removeFromSuperview()}
         cardView.setNeedsLayout()
-//        cardView.setNeedsDisplay()
     }
 
     @objc private func cardPileTapped(_ gestureRecognizer: UITapGestureRecognizer){
@@ -201,14 +206,16 @@ class SetViewController: UIViewController, cardViewDataSource {
     private func dealCards(){
         AudioServicesPlaySystemSound(tapSound)
         game.deal()
-        if game.dealtCards.count == GameConstants.maxCardsOnTable{
+        if allCardsDealt {
             cardPiles[0].isUserInteractionEnabled = false
             cardPiles[0].image = nil
         }
         
         cheatButton.isHidden = !checkForCheat()
+        if cheatButton.isHidden && allCardsDealt {
+            endGame()
+        }
         cardView.setNeedsLayout()
-//        cardView.setNeedsDisplay()
     }
 
     private func checkForCheat () -> Bool{
@@ -229,6 +236,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         }
         return cheatFound
     }
+    
     private func addselectedCardToMatchingSet(_ sender:CardView){
 //        print ("\(sender)")
         let idx = game.dealtCards[cardView.setCardViews.firstIndex(of: sender)!].id
@@ -298,6 +306,57 @@ class SetViewController: UIViewController, cardViewDataSource {
         var attributes = [NSAttributedString.Key: Any?]()
         attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(10), .foregroundColor: UIColor(red: 1.0, green: 0.5, blue: 0.5, alpha: 0.25), .strokeWidth: -3.0]
         test.attributedText = (NSAttributedString(string:"Bernie was here...", attributes:attributes as [NSAttributedString.Key : Any]))
+    }
+    
+    private func endGame(){
+        //create a message label
+        let labelWidth = self.view.bounds.width * 0.7
+        let labelHeigth = self.view.bounds.height * 0.4
+        let labelSize = CGSize(width: labelWidth, height: labelHeigth)
+        let labelOrigin = self.view.bounds.origin
+        let labelFrame = CGRect(origin: labelOrigin, size: labelSize)
+        let label = UILabel(frame: labelFrame)
+        label.center = self.view.center
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 0)
+        label.alpha = 0
+        self.view.addSubview(label)
+        
+        //create a message
+        var attributes = [NSAttributedString.Key: Any?]()
+        attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(88), .foregroundColor: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), .strokeWidth: -4.0]
+        label.attributedText = NSAttributedString(string:"Game Over", attributes:attributes as [NSAttributedString.Key : Any])
+        
+        animator = UIViewPropertyAnimator.init(duration: 5, curve: .easeOut, animations: {
+            [unowned self, label] in
+            label.alpha = 1
+            self.cardView.alpha = 0
+            
+            self.view.subviews.forEach {
+                if $0 is UIImageView {
+                    $0.alpha = 0
+                }
+            }
+        })
+        
+        animator.addCompletion({finished in
+            UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 2.0, delay: 0, options: .curveEaseOut, animations: {
+                [label] in
+                label.alpha = 0
+                }, completion:{finished in
+                    label.removeFromSuperview()
+                    self.cardView.alpha = 1
+                    self.newGame()
+                    for subView in self.view.subviews{
+                        if subView is UIImageView{
+                            subView.alpha = 1
+                        }
+                    }
+            })
+        })
+        animator.startAnimation(afterDelay: 3.0)
+
     }
 }
 //MARK: need to re-dupe the constants
