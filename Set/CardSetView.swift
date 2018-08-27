@@ -95,7 +95,7 @@ class CardSetView: UIView {
 
         }// loop through grid
 
-        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in self.turnUpCards()})
+        let _ = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: {_ in self.turnUpCards()})
         
     }//end func
     
@@ -105,6 +105,7 @@ class CardSetView: UIView {
             UIView.transition(with: cardView, duration: 0.5, options: [.transitionFlipFromLeft], animations: {
                 [unowned self] in
                 cardView.isFaceUp = true
+                cardView.subviews.forEach{$0.removeFromSuperview()}
                 self.delegate!.getDealtCards()[self.setCardViews.firstIndex(of: cardView)!].isFaceUp = true
                 }, completion: { animatingPosition in
                     self.setNeedsLayout()

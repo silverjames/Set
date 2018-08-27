@@ -126,18 +126,6 @@ class CardView: UIView {
         }
         currentPrimaryColor.setStroke()
         
-        //determine fill
-        switch self.cardFill {
-        case .solid:
-            currentPrimaryColor.setFill()
-        case .striped:
-            currentSecondaryColor = currentPrimaryColor.withAlphaComponent(0.3)
-            currentSecondaryColor.setFill()
-        case .unfilled:
-            currentSecondaryColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
-            currentSecondaryColor.setFill()
-        }
-        
         //consider the number of symbols per card
         var shapes = [UIBezierPath]()
         switch self.cardNumber {
@@ -151,11 +139,35 @@ class CardView: UIView {
             shapes.append(shapeFunction(cages[1]!.inset(by: setSymbolInset)))
             shapes.append(shapeFunction(cages[2]!.inset(by: setSymbolInset)))
         }
+        
+        //determine fill
+        switch self.cardFill {
+        case .solid:
+            currentPrimaryColor.setFill()
+        case .striped:
+            currentSecondaryColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+//            currentSecondaryColor = currentPrimaryColor.withAlphaComponent(0.3)
+//            currentSecondaryColor.setFill()
+        case .unfilled:
+            currentSecondaryColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+            currentSecondaryColor.setFill()
+        }
+
         shapes.forEach {
             $0.lineWidth = CardRatios.symbolLineWidth
             $0.stroke()
-            $0.fill()
-        }
+            switch self.cardFill{
+            case .solid, .unfilled:
+                $0.fill()
+            case .striped:
+                $0.addClip()
+                let stepperSize = $0.bounds.width/20
+                for x in stride(from: $0.bounds.minX, to: $0.bounds.maxX, by: stepperSize) {
+                    $0.move(to: CGPoint(x: x, y: 0))
+                    $0.addLine(to: CGPoint(x: x, y: $0.bounds.maxY))
+                }
+            }//switch
+        }//for each shape
     }
     
     private func drawCardBack (_ rect:CGRect){
@@ -188,16 +200,12 @@ class CardView: UIView {
         let p3 = CGPoint(x: rect.origin.x + 0.25 * rect.size.width, y: p2.y)
         let p4 = CGPoint(x: p3.x, y:p1.y)
         let cp1 = CGPoint(x: rect.origin.x + rect.size.width - cardInset(rect)/2, y: rect.origin.y + rect.height/2)
-//        let cp2 = CGPoint(x: rect.origin.x + rect.size.width/2, y: rect.origin.y + rect.size.height - cardInset(rect)/2)
         let cp3 = CGPoint(x: rect.origin.x + cardInset(rect)/2, y: cp1.y)
-//        let cp4 = CGPoint(x: cp2.x, y: rect.origin.y + cardInset(rect)/2)
         oval.move(to: p1)
         oval.addQuadCurve(to: p2, controlPoint: cp1)
         oval.addLine(to: p3)
-//        oval.addQuadCurve(to: p3, controlPoint: cp2)
         oval.addQuadCurve(to: p4, controlPoint: cp3)
         oval.addLine(to: p1)
-//        oval.addQuadCurve(to: p1, controlPoint: cp4)
         oval.lineJoinStyle = .round
         return oval
     }
@@ -234,6 +242,7 @@ class CardView: UIView {
     private func getCenter (_ rect:CGRect) -> CGPoint{
         return CGPoint(x: rect.midX, y: rect.midY)
     }
+
     private func cardInset (_ rect: CGRect) -> CGFloat{
         return (rect.width + rect.height)/2 * CardRatios.frameInsetRatio
     }
