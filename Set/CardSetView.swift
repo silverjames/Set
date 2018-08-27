@@ -87,7 +87,7 @@ class CardSetView: UIView {
 
             animator = UIViewPropertyAnimator.init(duration: 0.5, curve: .easeInOut, animations: {
                 [unowned self] in
-                    self.setCardViews[gridIndex].frame = self.grid[gridIndex]!.inset(by: self.setCardInset)
+                self.setCardViews[gridIndex].frame = self.grid[gridIndex]!.inset(by: self.setCardInset)
             })
 
             animator.startAnimation()
@@ -99,20 +99,18 @@ class CardSetView: UIView {
         
     }//end func
     
-    private func turnUpCards() {
+    func turnUpCards() {
 
-        animator = UIViewPropertyAnimator.init(duration: 0.5, curve: .easeInOut, animations: {
-            [unowned self] in
-            self.faceDownCards.forEach {cardView in
-                UIView.transition(with: cardView, duration: 0.5, options: .transitionFlipFromLeft, animations: {
-                        [cardView] in
-                        cardView.isFaceUp = true
-                    self.delegate!.getDealtCards()[idx].isFaceUp = true
-                    }, completion:nil)
-            }
-        })
-
-        animator.startAnimation()
+        self.faceDownCards.forEach { cardView in
+            UIView.transition(with: cardView, duration: 0.5, options: [.transitionFlipFromLeft], animations: {
+                [unowned self] in
+                cardView.isFaceUp = true
+                self.delegate!.getDealtCards()[self.setCardViews.firstIndex(of: cardView)!].isFaceUp = true
+                }, completion: { animatingPosition in
+                    self.setNeedsLayout()
+            })
+            
+        }//for each facedown card
         
 
     }

@@ -174,7 +174,6 @@ class SetViewController: UIViewController, cardViewDataSource {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -192,7 +191,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         cardView.setCardViews.removeAll()
         cardView.subviews.forEach{$0.removeFromSuperview()}
         cardView.setNeedsLayout()
-        cardView.setNeedsDisplay()
+//        cardView.setNeedsDisplay()
     }
 
     @objc private func cardPileTapped(_ gestureRecognizer: UITapGestureRecognizer){
@@ -209,7 +208,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         
         cheatButton.isHidden = !checkForCheat()
         cardView.setNeedsLayout()
-        cardView.setNeedsDisplay()
+//        cardView.setNeedsDisplay()
     }
 
     private func checkForCheat () -> Bool{
