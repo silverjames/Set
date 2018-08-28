@@ -23,17 +23,17 @@ class SetViewController: UIViewController, cardViewDataSource {
     }
     private var allCardsDealt:Bool {
         get {
-            return game.dealtCards.count == GameConstants.maxCardsOnTable
+            return game.setGame.count == 0
         }
     }
     private lazy var cheatSet = [SetCard]()
     private lazy var cardPiles = [UIImageView]()
     private var animator:UIViewPropertyAnimator!
+    private var player:AVAudioPlayer?
     private let tapSound = SystemSoundID(1105)
     private let newGameSound = SystemSoundID(1108)
     private let matchSound = SystemSoundID(1332)
     private let misMatchSound = SystemSoundID(1024)
-//    private var animator:UIViewPropertyAnimator!
 
     // **************************************
     // MARK: outlets and functions
@@ -65,9 +65,11 @@ class SetViewController: UIViewController, cardViewDataSource {
         selectedCards.removeAll(keepingCapacity: true)
 
         for card in cheatSet {
-            addselectedCardToMatchingSet(cardView.setCardViews[game.dealtCards.firstIndex(of: card)!])
+            if let _ = game.dealtCards.firstIndex(of: card) {
+                addselectedCardToMatchingSet(cardView.setCardViews[game.dealtCards.firstIndex(of: card)!])
+            }
         }
-        _ = Timer.scheduledTimer(withTimeInterval: 1.8, repeats: false, block: {_ in self.processMatch(matchSet: self.cheatSet)})
+        _ = Timer.scheduledTimer(withTimeInterval: Constants.timerInterval, repeats: false, block: {_ in self.processMatch(matchSet: self.cheatSet)})
         
         let penalty = -2 * matchPoints
         game.score += penalty
@@ -102,6 +104,7 @@ class SetViewController: UIViewController, cardViewDataSource {
                 if game.match(keysToMatch: matchSet){
                     print("cards matched!")
                     AudioServicesPlaySystemSound(matchSound)
+//MARK                    playMatchSound()
                     _ = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: {_ in self.processMatch(matchSet: matchSet)})
                 } else {
                     print("cards did not match!")
@@ -166,9 +169,6 @@ class SetViewController: UIViewController, cardViewDataSource {
             }//stack view
             
             if subView is UIImageView{
-//                subView.layer.borderColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-//                subView.layer.borderWidth = 1.0
-//                subView.layer.cornerRadius = 5
                 subView.isUserInteractionEnabled = true
                 cardPiles.append(subView as! UIImageView)
             }//image views
@@ -186,6 +186,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         super.viewDidLayoutSubviews()
         cardView.setNeedsDisplay()
     }
+    
     // **************************************
     // MARK: private functions
     // **************************************
@@ -203,10 +204,12 @@ class SetViewController: UIViewController, cardViewDataSource {
         guard gestureRecognizer.view != nil else {return}
         dealCards()
     }
+    
     private func dealCards(){
         AudioServicesPlaySystemSound(tapSound)
         game.deal()
         if allCardsDealt {
+            print ("all cards desalt and no more match")
             cardPiles[0].isUserInteractionEnabled = false
             cardPiles[0].image = nil
         }
@@ -287,6 +290,10 @@ class SetViewController: UIViewController, cardViewDataSource {
         dealCards()
     }
     
+//    private func playMatchSound(){
+//        player = AVAudioPlayer.init(contentsOf: Bundle.main.url(forResource: (<#T##String?#>), withExtension: <#T##String?#>), fileTypeHint: <#T##String?#>)
+//    }
+    
     private func processMismatch(matchSet:[SetCard]){
         for matches in selectedCards{
             matches.value.selected = false
@@ -329,9 +336,10 @@ class SetViewController: UIViewController, cardViewDataSource {
         label.attributedText = NSAttributedString(string:"Game Over", attributes:attributes as [NSAttributedString.Key : Any])
         
         animator = UIViewPropertyAnimator.init(duration: 5, curve: .easeOut, animations: {
-            [unowned self, label] in
+            [unowned self, label, score] in
             label.alpha = 1
             self.cardView.alpha = 0
+            score?.transform = CGAffineTransform.identity.scaledBy(x: 2.0, y: 2.0)
             
             self.view.subviews.forEach {
                 if $0 is UIImageView {
@@ -347,6 +355,7 @@ class SetViewController: UIViewController, cardViewDataSource {
                 }, completion:{finished in
                     label.removeFromSuperview()
                     self.cardView.alpha = 1
+                    self.score.transform = CGAffineTransform.identity
                     self.newGame()
                     for subView in self.view.subviews{
                         if subView is UIImageView{
@@ -365,5 +374,5 @@ private struct Constants {
     static let matchPoints = 5
     static let deselectPoints = -1
     static let defaultAspectRatio:CGFloat = 5/8
-    static let timerInterval = 1.2
+    static let timerInterval:Double = 0
 }
