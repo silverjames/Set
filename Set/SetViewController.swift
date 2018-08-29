@@ -27,6 +27,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         }
     }
     private lazy var cheatSet = [SetCard]()
+    private var cheated:Bool = false
     private lazy var cardPiles = [UIImageView]()
     private var animator:UIViewPropertyAnimator!
     private var player:AVAudioPlayer?
@@ -63,11 +64,12 @@ class SetViewController: UIViewController, cardViewDataSource {
     }
     
     @IBAction func cheatNow(_ sender: Any) {
+        cheated = true
         selectedCards.removeAll(keepingCapacity: true)
 
-        for card in cheatSet {
-            if let _ = game.dealtCards.firstIndex(of: card) {
-                addselectedCardToMatchingSet(cardView.setCardViews[game.dealtCards.firstIndex(of: card)!])
+        cheatSet.forEach {
+            if let _ = game.dealtCards.firstIndex(of: $0) {
+                addselectedCardToMatchingSet(cardView.setCardViews[game.dealtCards.firstIndex(of: $0)!])
             }
         }
         _ = Timer.scheduledTimer(withTimeInterval: Constants.timerInterval, repeats: false, block: {_ in self.processMatch(matchSet: self.cheatSet)})
@@ -282,7 +284,7 @@ class SetViewController: UIViewController, cardViewDataSource {
             UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.8, delay: 0, options: .curveEaseInOut, animations:{
                 self.cardPiles[1].image = UIImage(named: "cardback")
                 self.cardPiles[1].alpha = 0.7
-                self.cardView.setNeedsLayout()
+//                self.cardView.setNeedsLayout()
                 cardUIs.forEach {
                     $0.removeFromSuperview()
                     if let _ = self.cardView.setCardViews.firstIndex(of: $0){
@@ -294,7 +296,11 @@ class SetViewController: UIViewController, cardViewDataSource {
         
         cardView.animator.startAnimation()
         
-        game.score += matchPoints
+        if !cheated {
+            game.score += matchPoints
+        } else {
+            cheated = false
+        }
         updateScore()
         selectedCards.removeAll()
         dealCards()

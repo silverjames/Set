@@ -94,11 +94,30 @@ class CardSetView: UIView {
             self.addSubview(setCardViews[gridIndex])
 
         }// loop through grid
-
-        let _ = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: {_ in self.turnUpCards()})
         
+        faceDownCards.forEach {$0.isHidden = true}
+
+        let _ = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: {_ in self.dealCards()})
+        let _ = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false, block: {_ in self.turnUpCards()})
+
     }//end func
     
+    func dealCards() {
+        var saveCurrentCardPosition = [CGRect]()
+        faceDownCards.forEach {saveCurrentCardPosition.append($0.frame)}
+        faceDownCards.forEach {$0.frame = delegate!.getFrameOfPlayingCardPile()}
+
+        animator = UIViewPropertyAnimator.init(duration: 0.5, curve: .easeInOut, animations: {
+            [unowned self] in
+            self.faceDownCards.forEach {
+                $0.isHidden = false
+                $0.frame = saveCurrentCardPosition.remove(at: Int(saveCurrentCardPosition.count).arc4Random)
+            }
+        })
+        
+        animator.startAnimation()
+    }
+
     func turnUpCards() {
 
         self.faceDownCards.forEach { cardView in
@@ -108,12 +127,9 @@ class CardSetView: UIView {
                 cardView.subviews.forEach{$0.removeFromSuperview()}
                 self.delegate!.getDealtCards()[self.setCardViews.firstIndex(of: cardView)!].isFaceUp = true
                 }, completion: { animatingPosition in
-                    self.setNeedsLayout()
             })
             
         }//for each facedown card
-        
-
     }
     
 }//end class
@@ -130,3 +146,4 @@ extension CardSetView{
         return CGPoint(x: cell.origin.x + cell.width/2, y: cell.origin.y + cell.height/2)
     }
 }
+
