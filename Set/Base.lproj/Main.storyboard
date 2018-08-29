@@ -111,6 +111,7 @@
                         <outlet property="cardView" destination="giy-3W-0NG" id="eMy-Db-V9K"/>
                         <outlet property="cheatButton" destination="Qse-3G-Nio" id="Wht-TX-RjA"/>
                         <outlet property="deal" destination="6lw-p4-j0t" id="YNX-YN-CIV"/>
+                        <outlet property="newGameButton" destination="mWa-n9-viu" id="kgp-R6-BM4"/>
                         <outlet property="score" destination="DD9-rS-olj" id="0iT-Zc-vFs"/>
                         <outlet property="test" destination="B5y-nB-NKm" id="xJY-Bd-8Ta"/>
                     </connections>

@@ -48,7 +48,8 @@ class SetViewController: UIViewController, cardViewDataSource {
     @IBOutlet weak var test: UILabel!
     @IBOutlet weak var score: UILabel!
     @IBOutlet weak var cheatButton: UIButton!
- 
+    @IBOutlet weak var newGameButton: UIButton!
+    
     @IBAction func newGame(_ sender: UIButton) {
         AudioServicesPlaySystemSound(newGameSound)
         newGame()
@@ -148,6 +149,15 @@ class SetViewController: UIViewController, cardViewDataSource {
     // **************************************
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        
+        var attributes = [NSAttributedString.Key: Any?]()
+        let font = UIFont.preferredFont(forTextStyle: .body)
+        let metrics = UIFontMetrics(forTextStyle: .body)
+        let fontToUse = metrics.scaledFont(for: font)
+        let color:UIColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+        attributes = [.font:fontToUse, .foregroundColor: color, .strokeWidth: -3.0]
+        cheatButton.setAttributedTitle(NSAttributedString(string: "Cheat", attributes:attributes as [NSAttributedString.Key : Any]), for: .normal)
+        newGameButton.setAttributedTitle(NSAttributedString(string: "New Game", attributes:attributes as [NSAttributedString.Key : Any]), for: .normal)
     }
 
     override func viewDidLoad() {
@@ -305,7 +315,13 @@ class SetViewController: UIViewController, cardViewDataSource {
         }
     
     private func updateScore(){
-        score.text = "Score: \(game.score)"
+        var attributes = [NSAttributedString.Key: Any?]()
+        let font = UIFont.preferredFont(forTextStyle: .body)
+        let metrics = UIFontMetrics(forTextStyle: .body)
+        let fontToUse = metrics.scaledFont(for: font)
+        let color:UIColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+        attributes = [.font:fontToUse, .foregroundColor: color, .strokeWidth: -3.0]
+        score.attributedText = (NSAttributedString(string: "Score: \(game.score)", attributes:attributes as [NSAttributedString.Key : Any]))
     }
     
     private func printMessageForBernie(){
@@ -374,5 +390,5 @@ private struct Constants {
     static let matchPoints = 5
     static let deselectPoints = -1
     static let defaultAspectRatio:CGFloat = 5/8
-    static let timerInterval:Double = 0
+    static let timerInterval:Double = 1
 }
