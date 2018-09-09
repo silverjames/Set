@@ -81,6 +81,18 @@
                                 <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i8C-59-3BQ">
+                                <rect key="frame" x="332.5" y="571" width="18.5" height="20.5"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="81">
+                                        <attributes>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -99,10 +111,12 @@
                             <constraint firstItem="DD9-rS-olj" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Vyl-gk-i3p"/>
                             <constraint firstItem="DD9-rS-olj" firstAttribute="top" secondItem="6lw-p4-j0t" secondAttribute="top" id="YBw-59-wYu"/>
                             <constraint firstItem="Wf1-EC-rPi" firstAttribute="bottom" secondItem="6lw-p4-j0t" secondAttribute="bottom" id="YWo-nL-shW"/>
+                            <constraint firstItem="i8C-59-3BQ" firstAttribute="centerX" secondItem="Wf1-EC-rPi" secondAttribute="centerX" id="aya-aI-aI7"/>
                             <constraint firstItem="EFa-Jd-Ne3" firstAttribute="top" secondItem="Wf1-EC-rPi" secondAttribute="bottom" constant="8" symbolic="YES" id="c8o-TG-h2K"/>
                             <constraint firstItem="B5y-nB-NKm" firstAttribute="top" relation="greaterThanOrEqual" secondItem="DD9-rS-olj" secondAttribute="bottom" constant="8" symbolic="YES" id="cXD-wA-5lo"/>
                             <constraint firstItem="Wf1-EC-rPi" firstAttribute="top" secondItem="6lw-p4-j0t" secondAttribute="top" id="caa-5Z-ZbG"/>
                             <constraint firstItem="6lw-p4-j0t" firstAttribute="top" secondItem="giy-3W-0NG" secondAttribute="bottom" constant="8" symbolic="YES" id="nb2-c2-cUc"/>
+                            <constraint firstItem="i8C-59-3BQ" firstAttribute="centerY" secondItem="Wf1-EC-rPi" secondAttribute="centerY" id="rYN-ql-TPv"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -113,6 +127,7 @@
                         <outlet property="deal" destination="6lw-p4-j0t" id="YNX-YN-CIV"/>
                         <outlet property="newGameButton" destination="mWa-n9-viu" id="kgp-R6-BM4"/>
                         <outlet property="score" destination="DD9-rS-olj" id="0iT-Zc-vFs"/>
+                        <outlet property="setCounter" destination="i8C-59-3BQ" id="s2i-9a-qQQ"/>
                         <outlet property="test" destination="B5y-nB-NKm" id="xJY-Bd-8Ta"/>
                     </connections>
                 </viewController>

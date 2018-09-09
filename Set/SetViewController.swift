@@ -52,6 +52,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     @IBOutlet weak var score: UILabel!
     @IBOutlet weak var cheatButton: UIButton!
     @IBOutlet weak var newGameButton: UIButton!
+    @IBOutlet weak var setCounter: UILabel!
     
     @IBAction func newGame(_ sender: UIButton) {
         AudioServicesPlaySystemSound(newGameSound)
@@ -184,8 +185,6 @@ class SetViewController: UIViewController, cardViewDataSource {
                         button.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
                         button.layer.cornerRadius = 5
                         button.layer.borderWidth = 0.0
-                        button.titleLabel?.font = UIFont.systemFont(ofSize: 16.0)
-                        
                     }
                 }//stack view subs
             }//stack view
@@ -195,9 +194,11 @@ class SetViewController: UIViewController, cardViewDataSource {
                 cardPiles.append(subView as! UIImageView)
             }//image views
         }//subviews
+        
         self.cardPiles[0].image = UIImage(named: "cardback")
         self.cardPiles[1].image = UIImage(named: "cardback")
         self.cardPiles[1].isHidden = true
+
         printMessageForBernie()
         newGame()
     }
@@ -315,6 +316,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         let color:UIColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
         attributes = [.font:fontToUse, .foregroundColor: color, .strokeWidth: -3.0]
         score.attributedText = (NSAttributedString(string: "Score: \(game.score)", attributes:attributes as [NSAttributedString.Key : Any]))
+        setCounter.attributedText = (NSAttributedString(string: ("\((GameConstants.maxCardsOnTable - (game.dealtCards.count + game.setGame.count)) / 3)"), attributes:attributes as [NSAttributedString.Key : Any]))
     }
     
     private func printMessageForBernie(){
