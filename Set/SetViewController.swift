@@ -27,9 +27,11 @@ class SetViewController: UIViewController, cardViewDataSource {
         }
     }
     private lazy var cheatSet = [SetCard]()
+    private lazy var matchSet = [CardView]()
     private var cheated:Bool = false
     private lazy var cardPiles = [UIImageView]()
     private var animator:UIViewPropertyAnimator!
+
     private var player:AVAudioPlayer?
     private let tapSound = SystemSoundID(1105)
     private let newGameSound = SystemSoundID(1108)
@@ -72,7 +74,7 @@ class SetViewController: UIViewController, cardViewDataSource {
                 addselectedCardToMatchingSet(cardView.setCardViews[game.dealtCards.firstIndex(of: $0)!])
             }
         }
-        _ = Timer.scheduledTimer(withTimeInterval: Constants.timerInterval, repeats: false, block: {_ in self.processMatch(matchSet: self.cheatSet)})
+        _ = Timer.scheduledTimer(withTimeInterval: Constants.timerInterval, repeats: false, block: {_ in self.processMatch(matchingCards: self.cheatSet)})
         
         let penalty = -2 * matchPoints
         game.score += penalty
@@ -108,7 +110,7 @@ class SetViewController: UIViewController, cardViewDataSource {
                     print("cards matched!")
                     AudioServicesPlaySystemSound(matchSound)
 //MARK                    playMatchSound()
-                    _ = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: {_ in self.processMatch(matchSet: matchSet)})
+                    _ = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: {_ in self.processMatch(matchingCards: matchSet)})
                 } else {
                     print("cards did not match!")
                     AudioServicesPlaySystemSound(misMatchSound)
@@ -130,6 +132,9 @@ class SetViewController: UIViewController, cardViewDataSource {
     func getDealtCards() -> [SetCard] {
         return game.dealtCards
     }
+    func getMatchedCards() -> [CardView] {
+        return matchSet
+    }
     func getFrameOfPlayingCardPile() -> CGRect {
         if cardPiles.count == 2 {
             return cardPiles[0].frame
@@ -137,13 +142,18 @@ class SetViewController: UIViewController, cardViewDataSource {
             return self.view.frame
         }
     }
-    
     func getFrameOfDiscardPile() -> CGRect {
         if cardPiles.count == 2 {
             return cardPiles[1].frame
         } else{
             return self.view.frame
         }
+    }
+    func makeDiscardPileVisibleWithCounter() -> Void {
+        cardPiles[1].isHidden = false
+    }
+    func resetMatchedCards() -> Void {
+        matchSet.removeAll()
     }
 
     // **************************************
@@ -186,6 +196,8 @@ class SetViewController: UIViewController, cardViewDataSource {
             }//image views
         }//subviews
         self.cardPiles[0].image = UIImage(named: "cardback")
+        self.cardPiles[1].image = UIImage(named: "cardback")
+        self.cardPiles[1].isHidden = true
         printMessageForBernie()
         newGame()
     }
@@ -218,10 +230,8 @@ class SetViewController: UIViewController, cardViewDataSource {
     }
     
     private func dealCards(){
-        AudioServicesPlaySystemSound(tapSound)
         game.deal()
         if allCardsDealt {
-            print ("all cards desalt and no more match")
             cardPiles[0].isUserInteractionEnabled = false
             cardPiles[0].image = nil
         }
@@ -254,47 +264,24 @@ class SetViewController: UIViewController, cardViewDataSource {
     
     private func addselectedCardToMatchingSet(_ sender:CardView){
 //        print ("\(sender)")
-        let idx = game.dealtCards[cardView.setCardViews.firstIndex(of: sender)!].id
-        print("added card \(String(describing: idx))")
-        selectedCards[idx] = sender
-        sender.selected = true
+        if let _ = cardView.setCardViews.firstIndex(of: sender) {
+            let id = game.dealtCards[cardView.setCardViews.firstIndex(of: sender)!].id
+            print("added card \(String(describing: id))")
+            selectedCards[id] = sender
+            sender.selected = true
+        }
     }
     
-    private func processMatch(matchSet:[SetCard]){
+    private func processMatch(matchingCards:[SetCard]){
+
+        matchSet = Array(selectedCards.values)
+        
         for matches in selectedCards{
             let card = game.dealtCards.filter {$0.id == matches.key}
             game.dealtCards.remove(at: game.dealtCards.lastIndex(of: card.first!)!)
             game.matchedCards.append(card.first!)
             matches.value.selected = false
         }//loop through dictionary
-
-        let cardUIs = Array(selectedCards.values)
-
-        cardView.animator = UIViewPropertyAnimator.init(duration: 2.5, curve: .easeInOut, animations: {
-            [unowned self, cardUIs] in
-            cardUIs.forEach{
-                let dx = (self.getFrameOfDiscardPile().origin.x) - $0.frame.origin.x
-                let dy = (self.getFrameOfDiscardPile().origin.y) - $0.frame.origin.y
-                $0.transform = CGAffineTransform.identity.translatedBy(x: dx-25, y: dy-10).rotated(by: CGFloat.pi).scaledBy(x: 0.35, y: 0.35)
-                $0.alpha = 0.0
-            }
-        })
-        
-        cardView.animator.addCompletion({finished in
-            UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.8, delay: 0, options: .curveEaseInOut, animations:{
-                self.cardPiles[1].image = UIImage(named: "cardback")
-                self.cardPiles[1].alpha = 0.7
-//                self.cardView.setNeedsLayout()
-                cardUIs.forEach {
-                    $0.removeFromSuperview()
-                    if let _ = self.cardView.setCardViews.firstIndex(of: $0){
-                        self.cardView.setCardViews.remove(at: self.cardView.setCardViews.firstIndex(of: $0)!)
-                    }//if let
-                }//for all card views
-            })
-        })
-        
-        cardView.animator.startAnimation()
         
         if !cheated {
             game.score += matchPoints
@@ -357,7 +344,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         attributes = [.font:UIFont.preferredFont(forTextStyle: .body).withSize(88), .foregroundColor: #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), .strokeWidth: -4.0]
         label.attributedText = NSAttributedString(string:"Game Over", attributes:attributes as [NSAttributedString.Key : Any])
         
-        animator = UIViewPropertyAnimator.init(duration: 5, curve: .easeOut, animations: {
+        animator = UIViewPropertyAnimator.init(duration: 6, curve: .easeOut, animations: {
             [unowned self, label, score] in
             label.alpha = 1
             self.cardView.alpha = 0
@@ -390,11 +377,18 @@ class SetViewController: UIViewController, cardViewDataSource {
 
     }
 }
+
+extension CGFloat {
+    var arc4Random: CGFloat {
+        return CGFloat(arc4random_uniform(UInt32(self)))
+    }
+}
+
 //MARK: need to re-dupe the constants
 private struct Constants {
     static let mismatchPoints = -2
     static let matchPoints = 5
     static let deselectPoints = -1
     static let defaultAspectRatio:CGFloat = 5/8
-    static let timerInterval:Double = 1
+    static let timerInterval:Double = 0
 }

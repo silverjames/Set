@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CardView: UIView {
+class CardView: UIView, NSCopying {
 
     enum cColor: Int{
         case green = 0, red, purple
@@ -92,6 +92,14 @@ class CardView: UIView {
         }
         
     }//draw rect
+
+    //    *******************************
+    //    MARK: protocol functions
+    //    *******************************
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = CardView(frame: self.frame, cardNumber: self.cardNumber.rawValue, cardShape: self.cardShape.rawValue, cardFill: self.cardFill.rawValue, cardColor: self.cardColor.rawValue)
+        return copy
+    }
 
     //    *******************************
     //    MARK: class functions
