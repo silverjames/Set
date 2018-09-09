@@ -26,6 +26,11 @@ class SetViewController: UIViewController, cardViewDataSource {
             return game.setGame.count == 0
         }
     }
+    private var matchSetCounter:Int {
+        get {
+            return (GameConstants.maxCardsOnTable - (game.dealtCards.count + game.setGame.count)) / 3
+        }
+    }
     private lazy var cheatSet = [SetCard]()
     private lazy var matchSet = [CardView]()
     private var cheated:Bool = false
@@ -150,9 +155,6 @@ class SetViewController: UIViewController, cardViewDataSource {
             return self.view.frame
         }
     }
-    func makeDiscardPileVisibleWithCounter() -> Void {
-        cardPiles[1].isHidden = false
-    }
     func resetMatchedCards() -> Void {
         matchSet.removeAll()
     }
@@ -218,6 +220,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     private func newGame(){
         game.newGame()
         cheatButton.isHidden = !checkForCheat()
+        cardPiles[1].isHidden = true
         updateScore()
         print ("\(game.description)")
         cardView.setCardViews.removeAll()
@@ -316,7 +319,10 @@ class SetViewController: UIViewController, cardViewDataSource {
         let color:UIColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
         attributes = [.font:fontToUse, .foregroundColor: color, .strokeWidth: -3.0]
         score.attributedText = (NSAttributedString(string: "Score: \(game.score)", attributes:attributes as [NSAttributedString.Key : Any]))
-        setCounter.attributedText = (NSAttributedString(string: ("\((GameConstants.maxCardsOnTable - (game.dealtCards.count + game.setGame.count)) / 3)"), attributes:attributes as [NSAttributedString.Key : Any]))
+        setCounter.attributedText = (NSAttributedString(string: ("\(matchSetCounter)"), attributes:attributes as [NSAttributedString.Key : Any]))
+        if matchSetCounter != 0 {
+            self.cardPiles[1].isHidden  = false
+        }
     }
     
     private func printMessageForBernie(){

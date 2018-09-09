@@ -13,7 +13,6 @@ protocol cardViewDataSource: class {
     func getMatchedCards() -> [CardView]
     func getFrameOfPlayingCardPile() -> CGRect
     func getFrameOfDiscardPile() -> CGRect
-    func makeDiscardPileVisibleWithCounter() -> Void
     func resetMatchedCards() -> Void
 }
 
@@ -209,7 +208,6 @@ class CardSetView: UIView {
 //            cards.removeAll()
             self.cardCopies.removeAll()
             self.delegate?.resetMatchedCards()
-            self.delegate?.makeDiscardPileVisibleWithCounter()
         })
 
         animator.startAnimation()
