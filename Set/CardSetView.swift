@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 protocol cardViewDataSource: class {
     func getGridDimensions() -> (cellCount: Int, aspectRatio: CGFloat)
@@ -28,10 +29,15 @@ class CardSetView: UIView {
     private var grid = Grid(layout: .dimensions(rowCount: 1, columnCount: 1))
     var animator:UIViewPropertyAnimator!
     private let setCardInset = UIEdgeInsets.init(top: SetViewRatios.insets, left: SetViewRatios.insets, bottom: SetViewRatios.insets, right: SetViewRatios.insets)
-    private var oldCardPositions = [Int:CardView]()// id:index in grid
+    private var oldCardPositions = [Int:CardView]()// id:view
     private var faceDownCards:[CardView] {
         get {
             return setCardViews.filter {!$0.isFaceUp}
+        }
+    }
+    private var scaleFactorForDiscardAction:CGFloat {
+        get {
+            return delegate!.getFrameOfDiscardPile().width / (grid.cellSize.width - 2 * SetViewRatios.insets)
         }
     }
     private lazy var dynamicAnimator = UIDynamicAnimator.init(referenceView: self.superview!)
@@ -50,6 +56,9 @@ class CardSetView: UIView {
         dynamicAnimator.addBehavior(itemBehavior)
         return itemBehavior
     }()
+    private var player:AVAudioPlayer?
+    private let whooshURL = Bundle.main.path(forResource: "sound_whoosh_min", ofType: "mp3")
+
 
     //    *****************
     //    MARK: lifecycle Functions
@@ -79,7 +88,7 @@ class CardSetView: UIView {
         grid.frame = self.bounds
 
         for idx in 0..<setCardViews.count {
-            if idx <= delegate!.getDealtCards().count {
+            if idx < delegate!.getDealtCards().count {
                 oldCardPositions[delegate!.getDealtCards()[idx].id] = setCardViews[idx]
             }
         }
@@ -129,15 +138,29 @@ class CardSetView: UIView {
         faceDownCards.forEach {$0.frame = delegate!.getFrameOfPlayingCardPile()}
 
         animator = UIViewPropertyAnimator.init(duration: 0.5, curve: .easeInOut, animations: {
-            [unowned self] in
+            [unowned self, whooshURL] in
             self.faceDownCards.forEach {
                 $0.isHidden = false
                 $0.frame = saveCurrentCardPosition.remove(at: Int(saveCurrentCardPosition.count).arc4Random)
+                do {
+                    if whooshURL != nil {
+                        self.player = try AVAudioPlayer (contentsOf: URL(fileURLWithPath: whooshURL!))
+                        self.player?.play()
+                    } else {
+                        print ("no such audio file exists")
+                    }
+                }
+                catch let error {
+                    print ("error playing audio: \(error.localizedDescription)")
+                }
             }
         })
-        
+
         animator.startAnimation()
-    }
+    
+    
+    
+    }//end func
 
     private func turnUpCards() {
 
@@ -149,9 +172,8 @@ class CardSetView: UIView {
                 self.delegate!.getDealtCards()[self.setCardViews.firstIndex(of: card)!].isFaceUp = true
                 }, completion: { animatingPosition in
             })
-            
         }//for each facedown card
-    }
+    }//end func
     
     private func flyawayMatchedCards() {
         let matchedCards = self.delegate!.getMatchedCards()
@@ -171,14 +193,13 @@ class CardSetView: UIView {
             self.itemBehavior.addItem($0)
             let push = UIPushBehavior(items: [$0], mode: .instantaneous)
             push.angle = (2*CGFloat.pi).arc4Random
-            push.magnitude = CGFloat(4.0) + CGFloat(2.0).arc4Random
+            push.magnitude = CGFloat(10.0) + CGFloat(5.0).arc4Random
             push.action = {
                 [unowned push, weak self] in
                  self?.dynamicAnimator.removeBehavior(push)
             }
             self.dynamicAnimator.addBehavior(push)
         }//for each card
-
     }//end func
     
     private func discardFlyawaycards() {
@@ -189,11 +210,12 @@ class CardSetView: UIView {
             self.itemBehavior.removeItem($0)
         }
         
-        animator = UIViewPropertyAnimator.init(duration: timings.discard, curve: .easeOut, animations: {
+        animator = UIViewPropertyAnimator.init(duration: timings.discard, dampingRatio: 0.3 , animations: {
             [unowned self, cardCopies] in
+            let discardPileFrame = self.delegate!.getFrameOfDiscardPile()
             cardCopies.forEach {
                 $0.alpha = 0.5
-                $0.frame = self.delegate!.getFrameOfDiscardPile()
+                $0.transform = CGAffineTransform.identity.translatedBy(x: discardPileFrame.getCenter().x - $0.center.x, y: discardPileFrame.getCenter().y - $0.center.y).scaledBy(x: self.scaleFactorForDiscardAction, y: self.scaleFactorForDiscardAction)
             }
         })
         
@@ -205,7 +227,6 @@ class CardSetView: UIView {
             cards.forEach {
                 $0.removeFromSuperview()
             }
-//            cards.removeAll()
             self.cardCopies.removeAll()
             self.delegate?.resetMatchedCards()
         })
@@ -219,13 +240,13 @@ class CardSetView: UIView {
 
 extension CardSetView{
     private struct timings {
-        static let dealStart: TimeInterval = 0.5
-        static let turnupStart: TimeInterval = 0.8
+        static let dealStart: TimeInterval = 0.6
+        static let turnupStart: TimeInterval = 1.2
         static let flyawayStart: TimeInterval = 0.0
         static let discardStart: TimeInterval = 3.0
         static let shuffle: TimeInterval = 0.5
         static let deal: TimeInterval = 0.5
-        static let turnup: TimeInterval = 0.8
+        static let turnup: TimeInterval = 0.5
         static let discard: TimeInterval = 2.0
     }
     private struct SetViewRatios {

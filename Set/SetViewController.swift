@@ -40,8 +40,8 @@ class SetViewController: UIViewController, cardViewDataSource {
     private var player:AVAudioPlayer?
     private let tapSound = SystemSoundID(1105)
     private let newGameSound = SystemSoundID(1108)
-    private let matchSound = SystemSoundID(1332)
     private let misMatchSound = SystemSoundID(1024)
+    private let clickURL = Bundle.main.path(forResource: "Click_Electronic_05", ofType: "mp3")
 
     // **************************************
     // MARK: outlets and functions
@@ -114,8 +114,8 @@ class SetViewController: UIViewController, cardViewDataSource {
                 
                 if game.match(keysToMatch: matchSet){
                     print("cards matched!")
-                    AudioServicesPlaySystemSound(matchSound)
-//MARK                    playMatchSound()
+                    
+                //                    AudioServicesPlaySystemSound(matchSound)
                     _ = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: {_ in self.processMatch(matchingCards: matchSet)})
                 } else {
                     print("cards did not match!")
@@ -292,14 +292,24 @@ class SetViewController: UIViewController, cardViewDataSource {
         } else {
             cheated = false
         }
+
+        //play sound
+        do {
+            if clickURL != nil {
+                player = try AVAudioPlayer (contentsOf: URL(fileURLWithPath: clickURL!))
+                player?.play()
+            } else {
+                print ("no such audio file exists")
+            }
+        }
+        catch let error {
+            print ("error playing audio: \(error.localizedDescription)")
+        }
+
         updateScore()
         selectedCards.removeAll()
         dealCards()
     }
-    
-//    private func playMatchSound(){
-//        player = AVAudioPlayer.init(contentsOf: Bundle.main.url(forResource: (<#T##String?#>), withExtension: <#T##String?#>), fileTypeHint: <#T##String?#>)
-//    }
     
     private func processMismatch(matchSet:[SetCard]){
         for matches in selectedCards{
@@ -398,5 +408,5 @@ private struct Constants {
     static let matchPoints = 5
     static let deselectPoints = -1
     static let defaultAspectRatio:CGFloat = 5/8
-    static let timerInterval:Double = 0
+    static let timerInterval:Double = 0.5
 }
