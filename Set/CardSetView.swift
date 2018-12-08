@@ -15,6 +15,8 @@ protocol cardViewDataSource: class {
     func getFrameOfPlayingCardPile() -> CGRect
     func getFrameOfDiscardPile() -> CGRect
     func resetMatchedCards() -> Void
+    func pauseUserInteraction() -> Void
+    func enableUserInteraction() -> Void
 }
 
 class CardSetView: UIView {
@@ -86,43 +88,37 @@ class CardSetView: UIView {
         self.grid = Grid(layout: .aspectRatio(delegate!.getGridDimensions().aspectRatio))
         grid.cellCount = (delegate!.getGridDimensions().cellCount)
         grid.frame = self.bounds
-
-        for idx in 0..<setCardViews.count {
-            if idx < delegate!.getDealtCards().count {
-                oldCardPositions[delegate!.getDealtCards()[idx].id] = setCardViews[idx]
-            }
-        }
-
-        self.subviews.forEach {$0.removeFromSuperview()}
-        setCardViews.removeAll()
+        var saveCurrentCardPosition = [CGRect]()
+        print ("Cardviews: \(setCardViews.count)")
+        setCardViews.forEach {saveCurrentCardPosition.append($0.frame) }
         
-        for gridIndex in 0..<self.grid.cellCount {//create all cards
-
-            let card = CardView(frame: self.grid[gridIndex]!.inset(by: self.setCardInset),
-                                  cardNumber: self.delegate!.getDealtCards()[gridIndex].decoration[0],
-                                  cardShape: self.delegate!.getDealtCards()[gridIndex].decoration[1],
-                                  cardFill: self.delegate!.getDealtCards()[gridIndex].decoration[2],
-                                  cardColor: self.delegate!.getDealtCards()[gridIndex].decoration[3])
-            let tap = UITapGestureRecognizer(target: self.delegate!, action: #selector(SetViewController.touchCard(_:)))
-            card.addGestureRecognizer(tap)
-            card.translatesAutoresizingMaskIntoConstraints = false
-            card.isFaceUp = self.delegate!.getDealtCards()[gridIndex].isFaceUp
-            self.setCardViews.append(card)
-
-            if let oldFrame = oldCardPositions[delegate!.getDealtCards()[gridIndex].id] {
-                card.frame = oldFrame.frame
+        for gridIndex in 0..<self.grid.cellCount {
+            
+            if gridIndex == setCardViews.count {//produce a card
+                let card = CardView(frame: self.grid[gridIndex]!.inset(by: self.setCardInset),
+                                    cardNumber: self.delegate!.getDealtCards()[gridIndex].decoration[0],
+                                    cardShape: self.delegate!.getDealtCards()[gridIndex].decoration[1],
+                                    cardFill: self.delegate!.getDealtCards()[gridIndex].decoration[2],
+                                    cardColor: self.delegate!.getDealtCards()[gridIndex].decoration[3])
+                let tap = UITapGestureRecognizer(target: self.delegate!, action: #selector(SetViewController.touchCard(_:)))
+                card.addGestureRecognizer(tap)
+                //            card.translatesAutoresizingMaskIntoConstraints = false
+                card.isFaceUp = self.delegate!.getDealtCards()[gridIndex].isFaceUp
+                self.setCardViews.append(card)
+                self.addSubview(card)
             }
-
-            animator = UIViewPropertyAnimator.init(duration: timings.shuffle, curve: .easeInOut, animations: {
-                [unowned self] in
-                self.setCardViews[gridIndex].frame = self.grid[gridIndex]!.inset(by: self.setCardInset)
-            })
-
-            animator.startAnimation()
-            self.addSubview(setCardViews[gridIndex])
-
         }// loop through grid
-        
+
+        animator = UIViewPropertyAnimator.init(duration: timings.shuffle, curve: .easeInOut, animations: {
+            [unowned self] in
+            var idx = 0
+            self.setCardViews.forEach {
+                $0.frame = self.grid[idx]!.inset(by: self.setCardInset)
+                idx += 1
+                }
+            })
+        animator.startAnimation()
+
         faceDownCards.forEach {$0.isHidden = true}
 
         let _ = Timer.scheduledTimer(withTimeInterval: timings.dealStart, repeats: false, block: {_ in self.dealCards()})
@@ -136,6 +132,8 @@ class CardSetView: UIView {
         var saveCurrentCardPosition = [CGRect]()
         faceDownCards.forEach {saveCurrentCardPosition.append($0.frame)}
         faceDownCards.forEach {$0.frame = delegate!.getFrameOfPlayingCardPile()}
+        delegate!.pauseUserInteraction()
+
 
         animator = UIViewPropertyAnimator.init(duration: 0.5, curve: .easeInOut, animations: {
             [unowned self, whooshURL] in
@@ -157,9 +155,6 @@ class CardSetView: UIView {
         })
 
         animator.startAnimation()
-    
-    
-    
     }//end func
 
     private func turnUpCards() {
@@ -185,7 +180,8 @@ class CardSetView: UIView {
             cardCopies.last!.layer.borderColor = #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1)
             cardCopies.last!.layer.cornerRadius = SetViewRatios.cardCornerRadius
         }
-
+        
+        delegate?.resetMatchedCards()
 
         self.cardCopies.forEach {
             self.superview!.addSubview($0)
@@ -209,7 +205,7 @@ class CardSetView: UIView {
             self.collisionBehavior.removeItem($0)
             self.itemBehavior.removeItem($0)
         }
-        
+
         animator = UIViewPropertyAnimator.init(duration: timings.discard, dampingRatio: 0.3 , animations: {
             [unowned self, cardCopies] in
             let discardPileFrame = self.delegate!.getFrameOfDiscardPile()
@@ -218,17 +214,13 @@ class CardSetView: UIView {
                 $0.transform = CGAffineTransform.identity.translatedBy(x: discardPileFrame.getCenter().x - $0.center.x, y: discardPileFrame.getCenter().y - $0.center.y).scaledBy(x: self.scaleFactorForDiscardAction, y: self.scaleFactorForDiscardAction)
             }
         })
-        
-        animator.addCompletion({finished in
+
+        animator.addCompletion({_ in
             self.cardCopies.forEach {
                 $0.removeFromSuperview()
             }
-            let cards =  self.delegate!.getMatchedCards()
-            cards.forEach {
-                $0.removeFromSuperview()
-            }
             self.cardCopies.removeAll()
-            self.delegate?.resetMatchedCards()
+            self.delegate!.enableUserInteraction()   
         })
 
         animator.startAnimation()
@@ -242,7 +234,7 @@ extension CardSetView{
     private struct timings {
         static let dealStart: TimeInterval = 0.6
         static let turnupStart: TimeInterval = 1.2
-        static let flyawayStart: TimeInterval = 0.0
+        static let flyawayStart: TimeInterval = 0.4
         static let discardStart: TimeInterval = 3.0
         static let shuffle: TimeInterval = 0.5
         static let deal: TimeInterval = 0.5

@@ -31,6 +31,11 @@ class SetViewController: UIViewController, cardViewDataSource {
             return (GameConstants.maxCardsOnTable - (game.dealtCards.count + game.setGame.count)) / 3
         }
     }
+    private var remainingSetCounter:Int {
+        get {
+            return (game.dealtCards.count + game.setGame.count) / 3
+        }
+    }
     private lazy var cheatSet = [SetCard]()
     private lazy var matchSet = [CardView]()
     private var cheated:Bool = false
@@ -58,7 +63,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     @IBOutlet weak var cheatButton: UIButton!
     @IBOutlet weak var newGameButton: UIButton!
     @IBOutlet weak var setCounter: UILabel!
-    
+    @IBOutlet weak var remainingSets: UILabel!
     @IBAction func newGame(_ sender: UIButton) {
         AudioServicesPlaySystemSound(newGameSound)
         newGame()
@@ -156,7 +161,22 @@ class SetViewController: UIViewController, cardViewDataSource {
         }
     }
     func resetMatchedCards() -> Void {
+        matchSet.forEach {
+            $0.removeFromSuperview()
+        }
         matchSet.removeAll()
+    }
+    
+    func pauseUserInteraction() -> Void {
+        cardPiles.forEach {$0.isUserInteractionEnabled = false}
+        cheatButton.isUserInteractionEnabled = false
+        return
+    }
+    
+    func enableUserInteraction() -> Void {
+        cardPiles.forEach {$0.isUserInteractionEnabled = true}
+        cheatButton.isUserInteractionEnabled = true
+        return
     }
 
     // **************************************
@@ -285,6 +305,9 @@ class SetViewController: UIViewController, cardViewDataSource {
             game.dealtCards.remove(at: game.dealtCards.lastIndex(of: card.first!)!)
             game.matchedCards.append(card.first!)
             matches.value.selected = false
+            if cardView.setCardViews.firstIndex(of: matches.value) != nil {
+                cardView.setCardViews.remove(at: cardView.setCardViews.firstIndex(of: matches.value)!)
+            }
         }//loop through dictionary
         
         if !cheated {
@@ -330,6 +353,7 @@ class SetViewController: UIViewController, cardViewDataSource {
         attributes = [.font:fontToUse, .foregroundColor: color, .strokeWidth: -3.0]
         score.attributedText = (NSAttributedString(string: "Score: \(game.score)", attributes:attributes as [NSAttributedString.Key : Any]))
         setCounter.attributedText = (NSAttributedString(string: ("\(matchSetCounter)"), attributes:attributes as [NSAttributedString.Key : Any]))
+        remainingSets.attributedText = (NSAttributedString(string: ("\(remainingSetCounter)"), attributes:attributes as [NSAttributedString.Key : Any]))
         if matchSetCounter != 0 {
             self.cardPiles[1].isHidden  = false
         }

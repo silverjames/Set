@@ -75,7 +75,6 @@ class SetCardGame: CustomStringConvertible {
         if colors.allEqual() || colors.allDifferent(){
             matched[3] = true
         }
-
         return matched.allEqual() && matched.first == true
     }
     

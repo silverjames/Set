@@ -154,8 +154,6 @@ class CardView: UIView, NSCopying {
             currentPrimaryColor.setFill()
         case .striped:
             currentSecondaryColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
-//            currentSecondaryColor = currentPrimaryColor.withAlphaComponent(0.3)
-//            currentSecondaryColor.setFill()
         case .unfilled:
             currentSecondaryColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
             currentSecondaryColor.setFill()
