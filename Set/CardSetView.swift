@@ -231,7 +231,7 @@ class CardSetView: UIView {
 }//end class
 
 extension CardSetView{
-    private struct timings {
+    private struct timings: Codable {
         static let dealStart: TimeInterval = 0.6
         static let turnupStart: TimeInterval = 1.2
         static let flyawayStart: TimeInterval = 0.4
@@ -241,7 +241,7 @@ extension CardSetView{
         static let turnup: TimeInterval = 0.5
         static let discard: TimeInterval = 2.0
     }
-    private struct SetViewRatios {
+    private struct SetViewRatios: Codable {
         static let frameInsetRatio: CGFloat = 0.08
         static let maxSymbolsPerCard = 3
         static let cardCornerRadius:CGFloat = 5.0

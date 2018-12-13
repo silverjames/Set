@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SetCard: Equatable, CustomStringConvertible {
+class SetCard: Equatable, CustomStringConvertible, Codable {
     
     // **************************************
     // MARK: class functions

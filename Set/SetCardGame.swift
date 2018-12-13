@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SetCardGame: CustomStringConvertible {
+class SetCardGame: CustomStringConvertible, Codable {
     //  **************************************
     // MARK: API properties
     //  **************************************
@@ -132,7 +132,7 @@ extension Array where Element:Hashable {
     }
 }
 
-struct GameConstants {
+struct GameConstants: Codable {
     static let featureRange:CountableClosedRange = 0...2
     static let initialDealSize = 12 //MARK: debug
     static let dealSize = 3

@@ -37,6 +37,13 @@ class CardView: UIView, NSCopying {
         }
     }
     private let setSymbolInset = UIEdgeInsets.init(top: CardRatios.insets, left: CardRatios.insets, bottom: CardRatios.insets, right: CardRatios.insets)
+    
+    private enum CodingKeys: String, CodingKey {
+        case cardNumber = "card_number"
+        case cardShape = "card_shape"
+        case cardFill = "card_fill"
+        case cardColor = "card_color"
+    }
 
     //    *******************************
     //    MARK: class overrides
@@ -61,6 +68,16 @@ class CardView: UIView, NSCopying {
         self.contentMode = .redraw
     }
     
+//     required init (from decoder: Decoder) throws {
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+//        self.cardNumber = try container.decode(Int.self, forKey: .cardNumber)
+//        self.cardShape = .squiggle
+//        self.cardFill = .solid
+//        self.cardColor = .purple
+//        let superDecoder = try container.superDecoder()
+//        try super.init(from: superDecoder)
+//    }
+    
     required init?(coder aDecoder: NSCoder) {
         self.cardNumber = .one
         self.cardShape = .squiggle
@@ -68,7 +85,7 @@ class CardView: UIView, NSCopying {
         self.cardColor = .purple
         super.init(coder: aDecoder)
     }
-
+    
     override func draw(_ rect: CGRect) {
 //        print ("cv: draw")
         //draw card border and background
@@ -257,7 +274,7 @@ class CardView: UIView, NSCopying {
         return (rect.width + rect.height)/2 * CardRatios.frameInsetRatio
     }
 
-    private struct CardRatios {
+    private struct CardRatios: Codable {
         static let symbolLineWidth: CGFloat = 1.8
         static let frameInsetRatio: CGFloat = 0.08
         static let cardCornerRadius:CGFloat = 8.0
