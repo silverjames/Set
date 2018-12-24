@@ -38,13 +38,6 @@ class CardView: UIView, NSCopying {
     }
     private let setSymbolInset = UIEdgeInsets.init(top: CardRatios.insets, left: CardRatios.insets, bottom: CardRatios.insets, right: CardRatios.insets)
     
-    private enum CodingKeys: String, CodingKey {
-        case cardNumber = "card_number"
-        case cardShape = "card_shape"
-        case cardFill = "card_fill"
-        case cardColor = "card_color"
-    }
-
     //    *******************************
     //    MARK: class overrides
     //    *******************************
@@ -67,17 +60,7 @@ class CardView: UIView, NSCopying {
         self.isHidden = false
         self.contentMode = .redraw
     }
-    
-//     required init (from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        self.cardNumber = try container.decode(Int.self, forKey: .cardNumber)
-//        self.cardShape = .squiggle
-//        self.cardFill = .solid
-//        self.cardColor = .purple
-//        let superDecoder = try container.superDecoder()
-//        try super.init(from: superDecoder)
-//    }
-    
+        
     required init?(coder aDecoder: NSCoder) {
         self.cardNumber = .one
         self.cardShape = .squiggle

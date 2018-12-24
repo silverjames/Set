@@ -134,9 +134,9 @@ extension Array where Element:Hashable {
 
 struct GameConstants: Codable {
     static let featureRange:CountableClosedRange = 0...2
-    static let initialDealSize = 12 //MARK: debug
+    static let initialDealSize = 12
     static let dealSize = 3
-    static let maxCardsOnTable = 81
+    static let maxCardsOnTable = 81 
     static let mismatchPoints = -4
     static let cheatPoints = -5
     static let deselectPoints = -1

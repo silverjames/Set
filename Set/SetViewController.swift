@@ -271,14 +271,16 @@ class SetViewController: UIViewController, cardViewDataSource {
         var cheatFound = false
         cheatSet.removeAll(keepingCapacity: true)
         var checkSet:[SetCard]
-        for i in 0..<game.dealtCards.count-2{
-            for j in i+1..<game.dealtCards.count-1{
-                for k in j+1..<game.dealtCards.count{
-                    checkSet = [game.dealtCards[i], game.dealtCards[j], game.dealtCards[k]]
-                    if !cheatFound && game.match(keysToMatch: checkSet)  {
-                        cheatButton.isEnabled = true
-                        cheatFound = true
-                        cheatSet = checkSet
+        if game.dealtCards.count >= GameConstants.dealSize {
+            for i in 0..<game.dealtCards.count-2{
+                for j in i+1..<game.dealtCards.count-1{
+                    for k in j+1..<game.dealtCards.count{
+                        checkSet = [game.dealtCards[i], game.dealtCards[j], game.dealtCards[k]]
+                        if !cheatFound && game.match(keysToMatch: checkSet)  {
+                            cheatButton.isEnabled = true
+                            cheatFound = true
+                            cheatSet = checkSet
+                        }
                     }
                 }
             }
