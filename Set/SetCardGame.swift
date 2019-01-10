@@ -21,14 +21,10 @@ class SetCardGame: CustomStringConvertible, Codable {
             let idList = setGame.map({$0.id})
             let sortedIdList = idList.sorted {$1 > $0}
             deck += ("This deck has ID's \(String(describing: sortedIdList.first!)) through \(String(describing: sortedIdList.last!))\n")
-//            for card in setGame{
-//                deck += "\(card) \n"
-//                }
             return deck
             }
         }
     var score = 0
-//    enum far{}
 
     //  **************************************
     // MARK: private properties

@@ -14,7 +14,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     // **************************************
     // MARK: private properties
     // **************************************
-    private lazy var game:SetCardGame = SetCardGame()
+    lazy var game:SetCardGame = SetCardGame()
     private var selectedCards = [Int:CardView]()
     private var matchPoints:Int {
         get {
@@ -39,6 +39,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     private lazy var cheatSet = [SetCard]()
     private lazy var matchSet = [CardView]()
     private var cheated:Bool = false
+    var stateRestorationActive = false
     private lazy var cardPiles = [UIImageView]()
     private var animator:UIViewPropertyAnimator!
 
@@ -67,6 +68,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     @IBAction func newGame(_ sender: UIButton) {
         AudioServicesPlaySystemSound(newGameSound)
         newGame()
+        stateRestorationActive = false
     }
     
     @IBOutlet weak var deal: UIImageView!{
@@ -198,6 +200,7 @@ class SetViewController: UIViewController, cardViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         cardPiles.removeAll()
+        self.restorationIdentifier = "SetViewController"
         
         for subView in view.subviews{
             if subView is UIStackView {
@@ -222,7 +225,13 @@ class SetViewController: UIViewController, cardViewDataSource {
         self.cardPiles[1].isHidden = true
 
         printMessageForBernie()
-        newGame()
+        
+        if !stateRestorationActive{
+            newGame()
+        } else {
+            cheatButton.isHidden = !checkForCheat()
+            updateScore()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -239,12 +248,17 @@ class SetViewController: UIViewController, cardViewDataSource {
     // **************************************
     private func newGame(){
         game.newGame()
-        cheatButton.isHidden = !checkForCheat()
-        cardPiles[1].isHidden = true
-        updateScore()
-        print ("\(game.description)")
         cardView.setCardViews.removeAll()
         cardView.subviews.forEach{$0.removeFromSuperview()}
+        cheatButton.isHidden = !checkForCheat()
+
+        cardPiles[0].image = UIImage(named: "cardback")
+        cardPiles[1].image = UIImage(named: "cardback")
+        cardPiles[0].isUserInteractionEnabled = true
+        cardPiles[1].isHidden = true
+
+        updateScore()
+        print ("\(game.description)")
         cardView.setNeedsLayout()
     }
 

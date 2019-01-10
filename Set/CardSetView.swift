@@ -60,6 +60,7 @@ class CardSetView: UIView {
     }()
     private var player:AVAudioPlayer?
     private let whooshURL = Bundle.main.path(forResource: "sound_whoosh_min", ofType: "mp3")
+    
 
 
     //    *****************
@@ -68,6 +69,7 @@ class CardSetView: UIView {
     override func layoutSubviews() {
         print("csv: layoutSubviews")
         super.layoutSubviews()
+        self.restorationIdentifier = "CardSetView"
 
         if let _ = animator {
             if !animator.isRunning {
@@ -89,7 +91,7 @@ class CardSetView: UIView {
         grid.cellCount = (delegate!.getGridDimensions().cellCount)
         grid.frame = self.bounds
         var saveCurrentCardPosition = [CGRect]()
-        print ("Cardviews: \(setCardViews.count)")
+//        print ("Cardviews: \(setCardViews.count)")
         setCardViews.forEach {saveCurrentCardPosition.append($0.frame) }
         
         for gridIndex in 0..<self.grid.cellCount {
